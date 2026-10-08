@@ -59,4 +59,4 @@ The user prefers: structure/tree **first**, then wireframes ("Figma"), then simp
 
 ## Git status
 
-This folder is **not an initialized git repository** yet (as of 2026-10-08). Agreed plan when git is set up: create branch `feature/RR_demo`, commit these files **in a new subfolder**, push **only that branch**, and switch back — never commit to the user's main/current branch. Do not push without the user's explicit go-ahead.
+Initialized 2026-10-08 as its own repo (branch `main`); remote `origin` = **github.com/avnik-18/RRR.git**, first push landed (27d7c25). Deploy target: **Vercel, git-integration style** — the user imports the repo at vercel.com/new, and every push to `main` redeploys. Git runs from WSL: `wsl git -C /mnt/d/dashboard/RR …`. Do not push without the user's explicit go-ahead; `index.html` exists purely as the demo landing page (links to the three deliverables) and may be excluded from "single-file deliverable" expectations.

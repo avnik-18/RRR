@@ -14,7 +14,7 @@ The three deliverables are **standalone static HTML files** — no build step, n
 
 ## Real team data (use these names)
 
-Org chain (team of three since 2026-10-08): **Shan** (org head) → **Prastina** (senior manager) → **Prateesh** (manager, budget owner) → interns **Nikhilesh, Syed, Shourya**, who all report to Prateesh. The earlier 7-intern roster (Nandana, Anu, Bhavani, Tarun) was retired to keep the demo tight.
+Org chain (updated 2026-10-08: Prastina is the head; Shan and Prateesh sit on the same level beneath them): **Prastina** (org head) → **Shan** (senior manager, L2) and **Prateesh** (manager, budget owner, L1) → interns **Nikhilesh, Syed, Shourya**, who all report to Prateesh. The earlier 7-intern roster (Nandana, Anu, Bhavani, Tarun) was retired to keep the demo tight.
 
 Routing rules that come from the tree:
 - Peer kudos to an intern notifies Prateesh automatically.
@@ -27,14 +27,16 @@ Routing rules that come from the tree:
 | Employee | Nikhilesh | demo wallet owner |
 | Peer Employee | Syed | peer kudos, ≤100-pt attach |
 | Manager L1 | Prateesh | Manager boost quota (10,000/mo) |
-| Manager L2 | Prastina | Quarterly Excellence quota |
-| Manager L3 | Shan | Annual Pride quota |
+| Manager L2 | Shan | Quarterly Excellence quota |
+| Manager L3 | Prastina | Annual Pride quota |
 | Manager with Quota & Budget | registry decides (Prateesh today) | the carrier **changes per award type** |
 | Admin / HR | the awards office (no named person) | rules, pools, ballot, jury |
 
+Employee has two demo views (Nikhilesh and Shourya) — same persona keys for both.
+
 ## Award registry (the quota rules)
 
-`AWARDS` in the prototype is the single source of truth; `CARRIER_POOL` holds each carrier's points pool (Prateesh 10,000/mo seeded 6,500 used; Prastina 25,000; Shan 50,000; awards office 40,000). Rows: Kudos thanks (free), Peer reward (≤100 cap → office pool), Manager boost (100–1,000 → Prateesh), Quarterly Excellence (2,500 → Prastina), Annual Pride (10,000 → Shan), EoQ (5,000 → awards office). The Award rules view lets Admin/HR flip a carrier with a `<select>` — give flows, approval routes and pool deductions all re-read it live. The key emids rule: **the quota-carrying manager is not one fixed person; each award type names its own.**
+`AWARDS` in the prototype is the single source of truth; `CARRIER_POOL` holds each carrier's points pool (Prateesh · L1 pool 10,000/mo seeded 6,500 used; Shan · L2 pool 25,000; Prastina · L3 pool 50,000; awards office 40,000). Rows: Kudos thanks (free), Peer reward (≤100 cap → office pool), Manager boost (100–1,000 → Prateesh), Quarterly Excellence (2,500 → Shan), Annual Pride (10,000 → Prastina), EoQ (5,000 → awards office). The Award rules view lets Admin/HR flip a carrier with a `<select>` — give flows, approval routes and pool deductions all re-read it live. The key emids rule: **the quota-carrying manager is not one fixed person; each award type names its own.**
 
 ## Business rules baked into the flows
 

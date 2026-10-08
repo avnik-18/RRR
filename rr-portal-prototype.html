@@ -684,11 +684,12 @@
 
       <div class="tree card" style="padding:30px 16px">
         <div class="troot">
-          <div class="tnode"><span class="avatar gold">S</span><span><b>Shan</b><small>Manager L3 · org head</small></span></div>
+          <div class="tnode"><span class="avatar gold">P</span><span><b>Prastina</b><small>Manager L3 · org head</small></span></div>
           <div class="tvl"></div>
-          <div class="tnode"><span class="avatar gold">P</span><span><b>Prastina</b><small>Manager L2 · senior manager</small></span></div>
-          <div class="tvl"></div>
-          <div class="tnode"><span class="avatar gold">P</span><span><b>Prateesh</b><small>Manager L1 · of the three interns</small></span></div>
+          <div class="tbranches">
+            <div class="tnode"><span class="avatar gold">S</span><span><b>Shan</b><small>Manager L2 · senior manager</small></span></div>
+            <div class="tnode"><span class="avatar gold">P</span><span><b>Prateesh</b><small>Manager L1 · the 3 interns</small></span></div>
+          </div>
           <div class="tconnecting"><span class="h"></span></div>
           <div class="tbranches">
             <div class="tnode"><span class="avatar">N</span><span><b>Nikhilesh</b><small>Intern</small></span></div>
@@ -702,7 +703,7 @@
         <div class="card pad">
           <div class="syncnote" style="background:none;padding:0">
             <span aria-hidden="true">🌐</span>
-            <span><b>What sync decides here:</b> peer kudos to any intern notifies Prateesh; the boost quarters come out of Prateesh's quota pool; EoQ flows Prastina → Shan → the awards office — the tree, not the person, decides.</span>
+            <span><b>What sync decides here:</b> peer kudos to any intern notifies Prateesh; boost quarters come out of Prateesh's quota pool; EoQ flows Shan → Prastina → the awards office — the tree, not the person, decides.</span>
           </div>
         </div>
         <div class="card pad">
@@ -736,7 +737,7 @@
       <div class="syncnote card" style="margin-top:14px;padding:14px">
         <span aria-hidden="true">💡</span>
         <span><b>The emids rule:</b> the quota-owning manager is not one fixed person — <b>each award type names its own carrier</b>.
-        Boost rides with Prateesh (L1), Quarterly with Prastina (L2), Annual with Shan (L3), the EoQ payout with the awards office.
+        Boost rides with Prateesh (L1), Quarterly with Shan (L2), Annual with Prastina (L3), the EoQ payout with the awards office.
         Change a carrier here and every give/approval flow reads the new rule immediately.</span>
       </div>
     </main>
@@ -872,7 +873,7 @@
     <div class="nh"><b>Switch persona — the 7 roles</b><button class="xbtn" data-close="pmenu" aria-label="Close">✕</button></div>
     <p style="padding:12px 16px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line-soft)">
       One team, seven points of view. The tree maps every persona to a real person:
-      <b>Shan</b> → L3, <b>Prastina</b> → L2, <b>Prateesh</b> → L1 &amp; budget, interns → employee/peer, the awards office → Admin/HR.
+      <b>Prastina</b> → L3, <b>Shan</b> → L2, <b>Prateesh</b> → L1 &amp; budget, interns → employee/peer, the awards office → Admin/HR.
     </p>
     <div id="pmenuList"></div>
   </div>
@@ -905,10 +906,11 @@ const $$ = s => [...document.querySelectorAll(s)];
 /* ---------- personas (the 7) + real team ---------- */
 const PERSONAS = [
   {pid:'employee', label:'Employee',                    who:'Receives awards · earns and spends points', roleKey:'Nikhilesh'},
+  {pid:'employee2',label:'Employee',                    who:'Second employee lens — same keys as Nikhilesh', roleKey:'Shourya'},
   {pid:'peer',     label:'Peer Employee',               who:'Peer kudos · attaches ≤100-pt peer rewards', roleKey:'Syed'},
   {pid:'l1',       label:'Manager L1',                  who:'Manager of three · carries the Manager boost quota', roleKey:'Prateesh'},
-  {pid:'l2',       label:'Manager L2',                  who:'Senior manager · carries Quarterly Excellence quota', roleKey:'Prastina'},
-  {pid:'l3',       label:'Manager L3',                  who:'Org head · carries Annual Pride quota', roleKey:'Shan'},
+  {pid:'l2',       label:'Manager L2',                  who:'Senior manager · carries Quarterly Excellence quota', roleKey:'Shan'},
+  {pid:'l3',       label:'Manager L3',                  who:'Org head · carries Annual Pride quota', roleKey:'Prastina'},
   {pid:'qb',       label:'Manager with Quota & Budget', who:'The quota-holder who changes per award — see Award rules', roleKey:'Prateesh', lens:'rules'},
   {pid:'admin',    label:'Admin / HR',                  who:'Rules, quota pools, ballot clearance, jury chair', roleKey:'OFFICE', lens:'rules'},
 ];
@@ -917,8 +919,8 @@ const ROLES = {
   Syed:     {name:'Syed',      init:'S', cls:'',     role:'Intern',                          persona:'peer'},
   Shourya:  {name:'Shourya',   init:'S', cls:'',     role:'Intern',                          persona:'employee'},
   Prateesh: {name:'Prateesh',  init:'P', cls:'gold', role:'Manager L1 · budget owner',       persona:'l1'},
-  Prastina: {name:'Prastina',  init:'P', cls:'gold', role:'Manager L2 · senior manager',     persona:'l2'},
-  Shan:     {name:'Shan',      init:'S', cls:'gold', role:'Manager L3 · org head',           persona:'l3'},
+  Shan:     {name:'Shan',      init:'S', cls:'gold', role:'Manager L2 · senior manager',     persona:'l2'},
+  Prastina: {name:'Prastina',  init:'P', cls:'gold', role:'Manager L3 · org head',           persona:'l3'},
   OFFICE:   {name:'Awards office', init:'⚖', cls:'gold', role:'Admin / HR · jury chair',     persona:'admin'},
 };
 const DIR = ['Nikhilesh','Syed','Shourya','Prateesh','Prastina','Shan'];
@@ -928,14 +930,14 @@ const AWARDS = [
   {id:'kudos',  icon:'🤝', name:'Kudos thanks',          p:'free',       given:'Anyone (Employee · Peer)',   route:['No approval — always free'], carrier:'',   note:'Recognition and money are separate by design'},
   {id:'peer',   icon:'🎁', name:'Peer reward',           p:'≤ 100 pts',  given:'Peer / Employee',            route:['Cap check (auto · max 100)'], carrier:'OFFICE', note:'Paid from the program pool'},
   {id:'boost',  icon:'⚡', name:'Manager boost',         p:'100–1,000',  given:'Manager L1',                 route:['Pool guard (10,000/mo)'],    carrier:'Prateesh', note:'Deducted live from the carrier pool'},
-  {id:'quarterly', icon:'📊', name:'Quarterly Excellence', p:'2,500',   given:'Manager L1 (above boost)',   route:['L1 draft','L2 approval','carrier deduct'], carrier:'Prastina'},
-  {id:'annual', icon:'🌟', name:'Annual Pride',          p:'10,000',     given:'Managers L2 / L3',           route:['L2 review','L3 approval','carrier deduct'], carrier:'Shan'},
+  {id:'quarterly', icon:'📊', name:'Quarterly Excellence', p:'2,500',   given:'Manager L1 (above boost)',   route:['L1 draft','L2 approval','carrier deduct'], carrier:'Shan'},
+  {id:'annual', icon:'🌟', name:'Annual Pride',          p:'10,000',     given:'Managers L2 / L3',           route:['L2 review','L3 approval','carrier deduct'], carrier:'Prastina'},
   {id:'eoc',    icon:'🏆', name:'Employee of the Quarter', p:'5,000',    given:'Nomination (manager/peer)',  route:['AI review','L1 (intern nomination)','L2','L3','Office clears · ballot','Jury votes'], carrier:'OFFICE'},
 ];
 const CARRIER_POOL = {
   Prateesh:{label:'Prateesh · L1 pool', total:10000, used:6500},
-  Prastina:{label:'Prastina · L2 pool', total:25000, used:9000},
-  Shan:    {label:'Shan · L3 pool',     total:50000, used:20000},
+  Prastina:{label:'Prastina · L3 pool', total:50000, used:20000},
+  Shan:    {label:'Shan · L2 pool',     total:25000, used:9000},
   OFFICE:  {label:'Awards office pool', total:40000, used:12000},
 };
 
@@ -972,10 +974,10 @@ const S = {
       {b:'Syed recognized Nikhilesh',p:'Delivery · “rebuilt the failing test cases” · +100 peer pts. Boost or endorse from your dashboard.',t:'2h ago'},
       {b:'Q3 nomination might be due',p:'Nikhilesh carries 18 recognitions this quarter — a strong EoQ signal.',t:'today'}
     ],
-    Prastina:[
-      {b:'A nomination may reach you',p:'Employee-of-the-Quarter files pass your desk (L2) before Shan.',t:'today'}
+    Shan:[
+      {b:'A nomination may reach you',p:'Employee-of-the-Quarter files pass your desk (L2) before Prastina.',t:'today'}
     ],
-    Shan:[],
+    Prastina:[{b:'Org-head approvals',p:'Annual Pride and cleared EoQ finals wait on you before the awards office.',t:'today'}],
     OFFICE:[{b:'Q3 ballot will close 30 Sep',p:'Jury fills up as nominations clear the tree — office clears the ballot last.',t:'today'}],
   },
   unread:{Nikhilesh:0,Syed:0,Shourya:0,Prateesh:1,Prastina:1,Shan:0,OFFICE:1},
@@ -1247,8 +1249,8 @@ document.addEventListener('click',e=>{
   if(nb){S.nom.cand=nb.dataset.nom;openView('nominate');prefillNom();}
 });
 $('#reqBudgetBtn').addEventListener('click',()=>{
-  const esc={Prateesh:'Prastina',Prastina:'Shan',Shan:'OFFICE'}[S.role]||'Prastina';
-  toast(S.role==='Shan'
+  const esc={Prateesh:'Shan',Shan:'Prastina',Prastina:'OFFICE'}[S.role]||'Shan';
+  toast(esc==='OFFICE'
     ? 'Request sent to the awards office — a +4,000 top-up for next month.'
     : `Budget request routed to <b>${ROLES[esc].name}</b> via the company tree — +2,000 top-up requested.`);
   pushNotif(esc,'Budget top-up requested',`${ROLES[S.role].name} asked for +2,000 on their monthly pool.`);
@@ -1298,7 +1300,7 @@ function renderNomMeta(){
 const EOC_ROW=()=>AWARDS.find(a=>a.id==='eoc');
 function buildRoute(nomByRoleKey){
   const internNom=['Nikhilesh','Syed','Shourya'].includes(nomByRoleKey);
-  return internNom?['Prateesh','Prastina','Shan','OFFICE']:['Prastina','Shan','OFFICE'];
+  return internNom?['Prateesh','Shan','Prastina','OFFICE']:['Shan','Prastina','OFFICE'];
 }
 function nomStatusLine(){
   const st=S.nom;
@@ -1511,13 +1513,13 @@ function renderNotifs(){
 function pushNotif(to,b,p){if(S.notifs[to])S.notifs[to].unshift({b,p,t:'now'});S.unread[to]=(S.unread[to]||0)+1;if(to===S.role)syncRole();}
 function renderGuide(){
   const steps=[
-    ['Switch persona — 7 roles','Employee, Peer, L1/L2/L3, Quota & Budget, Admin/HR — Shan, Prastina, Prateesh and the interns in one menu.','pmenu'],
+    ['Switch persona — 7 roles','Employee, Peer, L1/L2/L3, Quota & Budget, Admin/HR — Prastina, Shan, Prateesh and the interns in one menu.','pmenu'],
     ['Open the praise feed','Syed recognizes Nikhilesh in seconds — kudos always free.','feed'],
     ['Send kudos (live modal)','The AI agent checks specificity & tone while you type; attach up to a 100-pt peer reward.','kudos'],
     ['Company tree sync','The tree knows the interns report to Prateesh — routing needs no manual work.','tree'],
     ['Manager dashboard','Prateesh reinforces with points against the L1 quota pool; each pool follows the registry.','manager'],
     ['Nominate for EoQ','AI validates eligibility, evidence, duplicates, policy — then drafts a summary.','nominate'],
-    ['Approve & endorse','Approval walks the tree — Prateesh (if intern-nominated), Prastina, Shan, awards office.','approval'],
+    ['Approve & endorse','Approval walks the tree — Prateesh (if intern-nominated), Shan, Prastina, awards office.','approval'],
     ['Award rules — the registry','Flip the quota carrier of any award; every flow follows live.','rules'],
     ['Jury & winner','The committee sees every file and votes. The winner’s 5,000 pts deduct from the carrier pool.','jury'],
     ['Wallet','A ledger of every point in and out.','wallet'],
@@ -1556,7 +1558,7 @@ function renderRules(){
       <td>${a.carrier?`
         <select data-carrier="${a.id}" style="border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:12.5px;background:#fff">
           ${['Prateesh','Prastina','Shan','OFFICE'].map(k=>`
-            <option value="${k}" ${a.carrier===k?'selected':''}>${ROLES[k].name} · ${({Prateesh:'L1',Prastina:'L2',Shan:'L3',OFFICE:'Admin/HR'})[k]}</option>`).join('')}
+            <option value="${k}" ${a.carrier===k?'selected':''}>${ROLES[k].name} · ${({Prateesh:'L1',Shan:'L2',Prastina:'L3',OFFICE:'Admin/HR'})[k]}</option>`).join('')}
         </select>`:'<span class="chip gray">none — free</span>'}
       </td>
       <td style="text-align:right">${pool?`<b class="num">${fmt(pool.total-pool.used)}</b> <span style="color:var(--faint);font-size:12px">/ ${fmt(pool.total)}</span>`:'—'}</td>

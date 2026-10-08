@@ -73,18 +73,22 @@
       <div class="tree">
         <div class="lvl">
           <div class="node head">
-            <span class="av dark">Sh</span>
-            <span><b>Shan</b><small>Higher title · org head</small></span>
-          </div>
-          <div class="v"></div>
-          <div class="node head">
             <span class="av dark">Pr</span>
-            <span><b>Prastina</b><small>Higher title · senior manager</small></span>
+            <span><b>Prastina</b><small>Higher title · org head</small></span>
           </div>
           <div class="v"></div>
-          <div class="node mgr">
-            <span class="av brown">Pr</span>
-            <span><b>Prateesh</b><small>Manager · budget owner for the team</small></span>
+          <div class="connect"><span class="vcap"></span></div>
+          <div class="connect"><div class="hline"></div></div>
+          <div class="connect"><span class="vcap"></span></div>
+          <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+            <div class="node mgr">
+              <span class="av brown">Sh</span>
+              <span><b>Shan</b><small>Manager · senior manager (same level as Prateesh)</small></span>
+            </div>
+            <div class="node mgr">
+              <span class="av brown">Pr</span>
+              <span><b>Prateesh</b><small>Manager · budget owner for the team</small></span>
+            </div>
           </div>
           <div class="connect"><span class="vcap"></span></div>
           <div class="connect"><div class="hline"></div></div>
@@ -98,10 +102,11 @@
       </div>
     </div>
     <p class="sub" style="margin-top:10px">
-      What the tree decides: every intern's <b>manager of record is Prateesh</b>. Peer kudos to any intern notifies
-      <b>Prateesh</b>, a manager boost spends <b>Prateesh's monthly budget</b>, and an EoQ nomination starts its
-      approval at <b>Prastina</b> (when the manager nominates) or <b>Prateesh</b> (when an intern nominates) —
-      then <b>Shan</b> before the jury. Joins, exits and title changes re-route all of this automatically the next morning.
+      <b>Prastina is the org head</b>; <b>Shan and Prateesh sit on the same level</b> beneath them — same rank,
+      different quotas. What the tree decides: every intern's <b>manager of record is Prateesh</b>. Peer kudos to any
+      intern notifies <b>Prateesh</b>, a manager boost spends <b>Prateesh's monthly budget</b>, and an EoQ nomination
+      starts its approval at <b>Shan</b> (when the manager nominates) or <b>Prateesh</b> (when an intern nominates) —
+      then <b>Prastina</b> before the jury. Joins, exits and title changes re-route all of this automatically the next morning.
     </p>
   </section>
 
@@ -143,7 +148,7 @@
           <div class="steps">
             <div class="step"><i>1</i><span>Prateesh opens the manager dashboard and boosts Nikhilesh's withdrawn-pipeline fix with <b>+500</b>.</span></div>
             <div class="step"><i>2</i><span>Budget guardrail: team wallet is <b>10,000/month</b>; 6,500 used → this lands fine at 7,000.</span></div>
-            <div class="step"><i>3</i><span>If he tried 5,000 → blocked: <b>“Budget limit exceeded — 3,500 remaining”</b>, with two buttons: reduce amount or <b>request more budget</b> (goes to Prastina).</span></div>
+            <div class="step"><i>3</i><span>If he tried 5,000 → blocked: <b>“Budget limit exceeded — 3,500 remaining”</b>, with two buttons: reduce amount or <b>request more budget</b> (goes to Shan, then Prastina).</span></div>
             <div class="step"><i>4</i><span>Nikhilesh gets notification + ledger entry.</span></div>
           </div>
         </div>
@@ -156,11 +161,11 @@
           <div class="steps">
             <div class="step"><i>1</i><span>Prateesh nominates <b>Nikhilesh</b> for Q3 Excellence — justification: rebuilt the failing test suite overnight, zero post-launch bugs.</span></div>
             <div class="step"><i>2</i><span>AI review: eligibility ✓ evidence from recognition history ✓ no duplicate ✓ policy ✓ — and drafts an AI summary for the jury.</span></div>
-            <div class="step"><i>3</i><span>Approval chain from the tree: <b>Prastina</b> (senior manager) → <b>Shan</b> (org head) → HR/awards committee.</span></div>
+            <div class="step"><i>3</i><span>Approval chain from the tree: <b>Shan</b> (senior manager) → <b>Prastina</b> (org head) → HR/awards office.</span></div>
             <div class="step"><i>4</i><span>Peers can <b>endorse</b> the same nomination instead of duplicating it.</span></div>
             <div class="step"><i>5</i><span>Jury sees all files and votes. Winner gets <b>+5,000 points</b> straight into the wallet → redeemed in the marketplace as vouchers.</span></div>
           </div>
-          <div class="note">Variant: if an intern (say Syed) nominates instead, approval <b>starts at Prateesh</b>, then Prastina → Shan. The tree, not the person, decides the route.</div>
+          <div class="note">Variant: if an intern (say Syed) nominates instead, approval <b>starts at Prateesh</b>, then Shan → Prastina. The tree, not the person, decides the route.</div>
         </div>
       </div>
 
@@ -175,9 +180,9 @@
           <div class="step"><i>1</i><span><b>Employee</b> — Nikhilesh: receives awards, earns and spends points.</span></div>
           <div class="step"><i>2</i><span><b>Peer Employee</b> — Syed (any other intern): peer kudos, attaches rewards up to the 100-pt cap.</span></div>
           <div class="step"><i>3</i><span><b>Manager L1</b> — Prateesh: manager of three, <b>budget owner</b>; carries the <b>Manager boost</b> quota (10,000/mo).</span></div>
-          <div class="step"><i>4</i><span><b>Manager L2</b> — Prastina: senior-manager approvals; would carry a <b>Quarterly Excellence</b> quota.</span></div>
-          <div class="step"><i>5</i><span><b>Manager L3</b> — Shan: org head; would carry the <b>Annual Pride</b> quota.</span></div>
-          <div class="step"><i>6</i><span><b>Manager with Quota &amp; Budget</b> — <b>not one fixed person</b>: each award type names its own carrier (boost → Prateesh, quarterly → Prastina, annual → Shan, EoQ → the awards office). Admin/HR can change it in the Award rules screen.</span></div>
+          <div class="step"><i>4</i><span><b>Manager L2</b> — Shan: senior-manager approvals; carries the <b>Quarterly Excellence</b> quota.</span></div>
+          <div class="step"><i>5</i><span><b>Manager L3</b> — Prastina: <b>org head</b>; carries the <b>Annual Pride</b> quota.</span></div>
+          <div class="step"><i>6</i><span><b>Manager with Quota &amp; Budget</b> — <b>not one fixed person</b>: each award type names its own carrier (boost → Prateesh, quarterly → Shan, annual → Prastina, EoQ → the awards office). Admin/HR can change it in the Award rules screen.</span></div>
           <div class="step"><i>7</i><span><b>Admin / HR</b> — the awards office: rules, buckets, ballot clearance, jury. No individual named here on purpose.</span></div>
         </div>
         <div class="note">Key rule: <b>the quota-carrying manager changes per award type</b> — the registry (Award rules) decides, not the org chart alone.</div>

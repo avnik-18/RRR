@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Applause · Rewards &amp; Recognition portal — clickable prototype</title>
+<style>
+  :root{
+    --bg:#F3F7F5;
+    --surface:#FFFFFF;
+    --ink:#14332E;
+    --muted:#5E7470;
+    --faint:#8AA09A;
+    --line:#E2EAE6;
+    --line-soft:#EDF2F0;
+    --teal:#0C7A6C;
+    --teal-ink:#095A50;
+    --teal-soft:#E3F1EE;
+    --gold:#9A6A0B;
+    --gold-soft:#FAF3E0;
+    --green:#2E7D45;
+    --red:#B3403F;
+    --red-soft:#F9ECEC;
+    --like:#D6455D;
+    --shadow:0 10px 30px rgba(20,51,46,.10), 0 2px 8px rgba(20,51,46,.06);
+    --r-lg:14px; --r-md:10px; --r-sm:7px;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font:400 14px/1.5 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-feature-settings:"tnum" 1;
+  }
+  button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+  button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+    outline:2px solid var(--teal);outline-offset:2px;border-radius:var(--r-sm);
+  }
+  input,select,textarea{font:inherit;color:inherit}
+
+  /* ================= app shell ================= */
+  .app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+  .sidebar{
+    background:var(--surface);border-right:1px solid var(--line);
+    padding:18px 14px;display:flex;flex-direction:column;gap:20px;
+    position:sticky;top:0;height:100vh;overflow:auto;
+  }
+  .logo{display:flex;align-items:center;gap:10px;padding:2px 6px}
+  .logomark{
+    width:34px;height:34px;border-radius:9px;background:var(--teal);color:#fff;
+    font-weight:800;font-size:16px;display:grid;place-items:center;flex:none;
+  }
+  .logo b{font-size:15.5px;letter-spacing:-.01em}
+  .logo span{display:block;font-size:11px;color:var(--muted);font-weight:400}
+  nav.nav{display:grid;gap:2px}
+  .nav button{
+    display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+    padding:9px 10px;border-radius:var(--r-md);color:var(--muted);
+  }
+  .nav button:hover{background:var(--line-soft);color:var(--ink)}
+  .nav button.active{background:var(--teal-soft);color:var(--teal-ink);font-weight:600}
+  .nav .ic{width:20px;display:grid;place-items:center;font-size:15px;opacity:.9}
+  .nav .badge{
+    margin-left:auto;background:var(--teal);color:#fff;font-size:10.5px;font-weight:700;
+    border-radius:99px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 5px;
+  }
+  .grade{
+    margin-top:auto;background:var(--bg);border:1px solid var(--line);
+    border-radius:var(--r-md);padding:11px 12px;font-size:12px;color:var(--muted);
+  }
+  .grade b{color:var(--ink)}
+  .grade .pts{font-weight:700;color:var(--gold)}
+
+  .main{display:flex;flex-direction:column;min-width:0}
+  .topbar{
+    position:sticky;top:0;z-index:40;background:var(--surface);
+    border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:14px;padding:10px 22px;
+  }
+  .search{
+    flex:1;max-width:380px;height:36px;border:1px solid var(--line);border-radius:9px;
+    background:var(--bg);display:flex;align-items:center;gap:8px;
+    padding:0 12px;color:var(--faint);font-size:13px;
+  }
+  .spacer{flex:1}
+  .pointschip{
+    display:flex;align-items:center;gap:7px;background:var(--gold-soft);
+    border:1px solid #EBDDBC;color:var(--gold);font-weight:700;font-size:13px;
+    border-radius:99px;padding:6px 12px;cursor:pointer;
+  }
+  .iconbtn{
+    position:relative;width:36px;height:36px;border-radius:var(--r-md);
+    display:grid;place-items:center;color:var(--muted);font-size:16px;
+    border:1px solid transparent;
+  }
+  .iconbtn:hover{background:var(--line-soft);color:var(--ink)}
+  .iconbtn .dot{
+    position:absolute;top:5px;right:6px;min-width:16px;height:16px;border-radius:99px;
+    background:var(--like);color:#fff;font-size:9.5px;font-weight:700;
+    display:grid;place-items:center;padding:0 4px;
+  }
+  .who{
+    display:flex;align-items:center;gap:10px;padding:4px 8px 4px 4px;
+    border-radius:99px;border:1px solid var(--line);
+  }
+  .who:hover{background:var(--line-soft)}
+  .avatar{
+    width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none;
+    font-size:11.5px;font-weight:700;color:#fff;background:var(--teal);
+  }
+  .avatar.gold{background:#B98A1C}
+  .who small{font-size:12px;font-weight:600;line-height:1.1;display:block}
+  .who s{text-decoration:none;font-size:10.5px;color:var(--muted);display:block}
+
+  /* ================= views ================= */
+  .view{width:100%;max-width:1000px;margin:0 auto;padding:26px 24px 60px}
+  .viewtitle{font-size:22px;font-weight:700;letter-spacing:-.01em}
+  .viewsub{color:var(--muted);font-size:13.5px;margin-top:3px}
+  .vhead{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  }
+  .pad{padding:18px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:900px){.app{grid-template-columns:64px 1fr}
+    .sidebar .lbl,.grade,.who small,.who s{display:none}
+    .grid2,.grid3{grid-template-columns:1fr}}
+  @media (max-width:640px){.grid2,.grid3{grid-template-columns:1fr}}
+
+  /* chips & buttons */
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+    color:var(--teal-ink);background:var(--teal-soft);border-radius:99px;padding:4px 10px;
+  }
+  .chip.gold{color:var(--gold);background:var(--gold-soft)}
+  .chip.gray{color:var(--muted);background:var(--line-soft)}
+  .chip.red{color:var(--red);background:var(--red-soft)}
+  .btn{
+    display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:600;
+    border-radius:var(--r-md);padding:9px 14px;transition:transform .08s ease,background .15s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--teal);color:#fff}
+  .btn.primary:hover{background:var(--teal-ink)}
+  .btn.ghost{border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+  .btn.ghost:hover{background:var(--line-soft)}
+  .btn.subtle{background:var(--teal-soft);color:var(--teal-ink)}
+  .btn.gold{background:var(--gold);color:#fff}
+  .btn.sm{font-size:12.5px;padding:6px 11px}
+  .btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+  .linkbtn{color:var(--teal);font-weight:600;font-size:13px}
+  .linkbtn:hover{text-decoration:underline}
+
+  /* feed */
+  .composer{
+    display:flex;align-items:center;gap:12px;padding:14px 16px;margin-bottom:14px;
+  }
+  .composer .fake{
+    flex:1;background:var(--bg);border:1px solid var(--line);border-radius:99px;
+    padding:9px 14px;color:var(--faint);font-size:13.5px;text-align:left;
+  }
+  .post{padding:16px 18px;margin-bottom:12px}
+  .post .ph{display:flex;align-items:center;gap:10px}
+  .post .ph .meta{font-size:12.5px;color:var(--muted);line-height:1.3}
+  .post .ph b{font-size:13.5px;color:var(--ink)}
+  .post .msg{font-size:14.5px;line-height:1.55;margin:10px 0 12px;color:var(--ink)}
+  .post .msg .quoted{color:var(--teal-ink);background:var(--teal-soft);border-radius:6px;padding:0 3px}
+  .pfoot{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .footnum{font-weight:700}
+  .stat-inline{display:flex;gap:14px;align-items:center;font-size:12.5px;color:var(--muted)}
+  .heartbtn{
+    display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:5px 10px;
+    border:1px solid var(--line);font-size:12.5px;font-weight:600;color:var(--muted);
+  }
+  .heartbtn:hover{border-color:var(--like);color:var(--like)}
+  .heartbtn.on{border-color:var(--like);color:var(--like);background:#FDF2F4}
+
+  /* org tree */
+  .tree{display:grid;place-items:center;padding:26px 12px 10px}
+  .troot{display:grid;justify-items:center}
+  .tnode{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);
+    padding:9px 14px;display:flex;align-items:center;gap:9px;min-width:150px;
+  }
+  .tnode small{color:var(--muted);font-size:11px;display:block}
+  .tvl{width:2px;height:22px;background:var(--line)}
+  .tbranches{display:flex;gap:34px}
+  .tconnecting{height:14px;display:grid;place-items:center}
+  .tconnecting .h{width:196px;height:2px;background:var(--line)}
+  .syncnote{
+    display:flex;gap:10px;align-items:flex-start;background:var(--teal-soft);
+    border-radius:var(--r-md);padding:12px 14px;font-size:13px;color:var(--teal-ink);
+  }
+
+  /* manager */
+  .budgetbar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:10px}
+  .budgetbar i{display:block;height:100%;background:var(--teal);border-radius:99px;transition:width .4s ease}
+  .bignum{font-size:26px;font-weight:700;letter-spacing:-.02em}
+  .kv{display:flex;gap:18px;font-size:12.5px;color:var(--muted);margin-top:8px;flex-wrap:wrap}
+  .member{
+    display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line);
+  }
+  .member:first-child{border-top:0}
+  .givepop{
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;
+    background:var(--bg);border:1px dashed var(--line);border-radius:var(--r-md);padding:10px;
+  }
+  .amtchip{border:1px solid var(--line);border-radius:99px;padding:5px 11px;font-size:12.5px;font-weight:600;background:#fff}
+  .amtchip:hover{border-color:var(--gold);color:var(--gold)}
+  .warnbox{
+    display:flex;gap:10px;align-items:flex-start;background:var(--red-soft);
+    border-radius:var(--r-md);padding:11px 13px;font-size:13px;color:var(--red);
+  }
+
+  /* award hub, forms */
+  .cand{display:flex;flex-direction:column;gap:9px}
+  .aidlg{
+    display:flex;flex-direction:column;gap:8px;background:var(--bg);
+    border:1px dashed var(--line);border-radius:var(--r-md);padding:12px 14px;
+  }
+  .airow{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted)}
+  .airow .tick{width:17px;color:var(--green);font-weight:800;opacity:0}
+  .airow.done{color:var(--ink)}
+  .airow.done .tick{opacity:1}
+  .spin{
+    width:13px;height:13px;border-radius:50%;border:2px solid var(--line);
+    border-top-color:var(--teal);animation:spin .8s linear infinite;display:inline-block;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .field{display:grid;gap:6px;margin-bottom:14px}
+  .field label{font-size:12.5px;font-weight:600}
+  .field input[type=text],.field select,.field textarea{
+    border:1px solid var(--line);border-radius:var(--r-md);padding:9px 12px;background:#fff;
+  }
+  .field textarea{min-height:96px;resize:vertical;line-height:1.55}
+  .fselect{display:flex;gap:6px;flex-wrap:wrap}
+  .fchip{border:1px solid var(--line);border-radius:99px;background:#fff;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--muted)}
+  .fchip[aria-pressed="true"]{border-color:var(--teal);background:var(--teal-soft);color:var(--teal-ink)}
+
+  /* timeline */
+  .tline{position:relative;padding-left:26px;display:grid;gap:0;margin-top:6px}
+  .tline:before{content:"";position:absolute;left:7px;top:10px;bottom:10px;width:2px;background:var(--line)}
+  .tstep{position:relative;display:flex;gap:10px;align-items:flex-start;padding:10px 0;flex-wrap:wrap}
+  .tstep:before{
+    content:"";position:absolute;left:-26px;top:14px;width:16px;height:16px;border-radius:50%;
+    background:var(--line);
+  }
+  .tstep.done:before{background:var(--green)}
+  .tstep.now:before{background:var(--teal);box-shadow:0 0 0 4px var(--teal-soft)}
+  .tstep .st{width:110px;font-size:11.5px;color:var(--muted);font-weight:600;padding-top:2px}
+  .tstep b{font-size:13.5px}
+
+  /* table (jury + ledger) */
+  table.tb{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tb th{
+    text-align:left;font-size:11.5px;color:var(--muted);font-weight:600;
+    padding:10px 14px;border-bottom:1px solid var(--line);background:var(--bg);
+  }
+  .tb td{padding:12px 14px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+  .tb tr:last-child td{border-bottom:0}
+  .num{font-feature-settings:"tnum" 1;font-weight:700}
+  .neg{color:var(--red)}
+  .pos{color:var(--green)}
+
+  /* wallet / market */
+  .walcard{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .mk{display:flex;flex-direction:column;gap:10px;padding:16px}
+  .mk .mkimg{
+    height:64px;border-radius:var(--r-md);background:var(--bg);border:1px solid var(--line-soft);
+    display:grid;place-items:center;font-size:26px;
+  }
+  .mkgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:900px){.mkgrid{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.mkgrid{grid-template-columns:1fr}}
+
+  /* overlays */
+  .ovl{
+    position:fixed;inset:0;background:rgba(20,51,46,.45);display:grid;place-items:center;
+    z-index:80;padding:20px;
+  }
+  .modal{
+    background:var(--surface);border-radius:16px;box-shadow:var(--shadow);
+    width:100%;max-width:560px;max-height:calc(100vh - 60px);overflow:auto;
+  }
+  .modal .mh{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);
+  }
+  .modal .mh b{font-size:15.5px}
+  .modal .mc{padding:18px}
+  .xbtn{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+  .xbtn:hover{background:var(--line-soft)}
+
+  .drawer{
+    position:fixed;inset:0;z-index:80;display:grid;grid-template-columns:1fr 360px;
+    pointer-events:none;
+  }
+  .drawer .shade{background:rgba(20,51,46,.35)}
+  .drawer .panel{
+    background:var(--surface);border-left:1px solid var(--line);height:100%;
+    overflow:auto;pointer-events:auto;box-shadow:var(--shadow);
+  }
+  .nh{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface)}
+  .nitem{padding:14px 16px;border-bottom:1px solid var(--line-soft);display:flex;gap:10px;flex-direction:column}
+  .nitem b{font-size:13.5px}
+  .nitem p{font-size:13px;color:var(--muted);line-height:1.5}
+
+  .panelli{padding:12px 16px;border-bottom:1px solid var(--line-soft)}
+  .panelli b{font-size:13.5px}
+  .panelli p{font-size:12.5px;color:var(--muted)}
+
+  /* toasts */
+  .toasts{position:fixed;right:18px;bottom:18px;display:grid;gap:9px;z-index:120;max-width:360px}
+  .toast{
+    background:var(--ink);color:#fff;border-radius:var(--r-md);padding:11px 14px;
+    font-size:13px;box-shadow:var(--shadow);display:flex;gap:9px;align-items:flex-start;
+    animation:tin .18s ease;
+  }
+  @keyframes tin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .toast .tk{color:#8FE3C8;font-weight:700}
+
+  .winnerpass{
+    text-align:center;padding:40px 26px;display:grid;gap:8px;justify-items:center;
+  }
+  .bigmedal{
+    width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#F3D98B,#B98A1C);
+    display:grid;place-items:center;font-size:38px;color:#fff;
+    box-shadow:0 12px 30px rgba(154,106,11,.35);
+  }
+  .confetti{position:absolute;top:-8px;font-size:13px;opacity:.9;animation:fall 2.6s linear forwards}
+  @keyframes fall{to{transform:translateY(270px) rotate(540deg);opacity:0}}
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+    html{scroll-behavior:auto}
+  }
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= sidebar ================= -->
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="logomark" aria-hidden="true">A</span>
+      <div>
+        <b>Applause</b>
+        <span>Rewards &amp; recognition</span>
+      </div>
+    </div>
+
+    <button class="btn primary" id="giveKudosBtn">
+      <span aria-hidden="true">＋</span> Give kudos
+    </button>
+
+    <nav class="nav" aria-label="Main">
+      <button data-view="feed" class="active"><span class="ic">🏠</span><span class="lbl">Feed</span></button>
+      <button data-view="manager"><span class="ic">🧭</span><span class="lbl">Manager dashboard</span></button>
+      <button data-view="awards"><span class="ic">🏆</span><span class="lbl">Awards · EoQ</span></button>
+      <button data-view="jury"><span class="ic">🏛️</span><span class="lbl">Jury</span></button>
+      <button data-view="rules"><span class="ic">⚖️</span><span class="lbl">Award rules</span></button>
+      <button data-view="wallet"><span class="ic">👛</span><span class="lbl">My wallet</span></button>
+      <button data-view="market"><span class="ic">🎁</span><span class="lbl">Rewards marketplace</span></button>
+      <button data-view="tree"><span class="ic">🌳</span><span class="lbl">Company tree</span></button>
+      <button id="guideBtn"><span class="ic">🗺️</span><span class="lbl">Product walkthrough</span></button>
+    </nav>
+
+    <div class="grade">
+      Point totals live with the ledger as they happen.
+      <br><b>Nikhilesh &nbsp;·&nbsp; <span class="pts" id="sidePts">850</span> points</b>
+    </div>
+  </aside>
+
+  <!-- ================= main ================= -->
+  <div class="main">
+    <header class="topbar">
+      <div class="search" role="search"><span aria-hidden="true">🔎</span> Search people, recognitions, awards…</div>
+      <span class="spacer"></span>
+      <button class="pointschip" data-view="wallet" title="Open wallet">
+        <span aria-hidden="true">🪙</span> <span id="topPts">850 pts</span>
+      </button>
+      <button class="iconbtn" id="bellBtn" aria-label="Notifications">
+        <span aria-hidden="true">🔔</span><span class="dot" id="bellCount" hidden>0</span>
+      </button>
+      <button class="who" id="roleBtn" aria-haspopup="true" aria-label="Switch persona">
+        <span class="avatar" id="roleAv">N</span>
+        <span>
+          <small id="roleName">Nikhilesh</small>
+          <s id="roleRole">Employee · Intern</s>
+        </span>
+      </button>
+    </header>
+
+    <!-- ---------------- FEED ---------------- -->
+    <main id="view-feed" class="view" role="region" aria-label="Praise feed">
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">Praise feed</h1>
+          <p class="viewsub">Appreciate a teammate. Kudos is always free to send — points are optional.</p>
+        </div>
+        <button class="btn ghost sm" onclick="openView('tree')">Company tree <span aria-hidden="true">→</span></button>
+      </div>
+
+      <div class="card composer">
+        <span class="avatar" id="composerAv">N</span>
+        <button class="fake" id="composerFake">+ Congratz / Praise — who deserves a shout-out today?</button>
+        <button class="btn primary" data-open-kudos>Give kudos</button>
+      </div>
+
+      <div id="feedlist"></div>
+    </main>
+
+    <!-- ---------------- MANAGER ---------------- -->
+    <main id="view-manager" class="view" role="region" aria-label="Manager dashboard" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle" id="mgrHead">Manager dashboard</h1>
+          <p class="viewsub">Manager reinforcement is where a kudos becomes a habit. The quota pools shown follow the <b>Award rules</b> registry.</p>
+        </div>
+        <span class="chip">Team Q3 · Feb 2026</span>
+      </div>
+
+      <div class="grid2" style="margin-bottom:14px">
+        <div class="card pad" id="mBudgetCard" hidden>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <b id="bTitle">Monthly reward budget</b>
+            <span id="bAwards" style="display:inline-flex;gap:6px;flex-wrap:wrap"></span>
+          </div>
+          <div class="bignum" id="bUsed" style="margin-top:6px">—</div>
+          <div class="budgetbar"><i id="bBar" style="width:0%"></i></div>
+          <div class="kv">
+            <span>Remaining <b id="bLeft">—</b></span>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn ghost sm" id="reqBudgetBtn">Request more budget</button>
+          </div>
+        </div>
+        <div class="card pad">
+          <b>Recognition health</b>
+          <div class="grid2" style="margin-top:10px">
+            <div><div class="bignum" id="teamCount">2</div><div style="color:var(--muted);font-size:12.5px">recognized this quarter</div></div>
+            <div><div class="bignum" id="teamKudos">24</div><div style="color:var(--muted);font-size:12.5px">team kudos sent</div></div>
+          </div>
+          <p style="font-size:12.5px;color:var(--muted);margin-top:10px">People who never get peer kudos appear here — an early signal worth a 1:1 check-in.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="pad" style="padding-bottom:8px"><b>Team recognitions</b></div>
+        <div id="teamRecList"></div>
+      </div>
+
+      <div class="card pad" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between">
+        <span style="font-size:13.5px;color:var(--muted)">Exceptional quarter? Move someone from count to formal recognition.</span>
+        <button class="btn primary" onclick="openView('awards')">Nominate for Employee of the Quarter</button>
+      </div>
+    </main>
+
+    <!-- ---------------- AWARDS HUB ---------------- -->
+    <main id="view-awards" class="view" role="region" aria-label="Awards" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">Employee of the Quarter</h1>
+          <p class="viewsub">Q3 2026 cycle · submissions to the jury close 30 Sep. Anyone can nominate — endorsement and approval follow the company tree.</p>
+        </div>
+      </div>
+
+      <div class="card pad" style="margin-bottom:14px">
+        <div class="syncnote" style="background:var(--bg);color:var(--ink)">
+          <span aria-hidden="true">🤖</span>
+          <span><b>The AI workflow agent checks nominations</b> — eligibility, evidence, duplicates, policy — and drafts a summary from each candidate's recognition history. It moves the paperwork; the jury still decides.</span>
+        </div>
+      </div>
+
+      <div class="grid3" id="candGrid" style="margin-bottom:16px"></div>
+
+      <div class="card pad" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>
+          <b>Nomination status</b>
+          <p style="font-size:12.5px;color:var(--muted)" id="awardStatusLine">No nomination submitted by you this quarter.</p>
+        </div>
+        <button class="btn subtle" onclick="openView('approval')">Track submission</button>
+      </div>
+
+      <div class="card pad" style="margin-top:14px">
+        <b>Loop: Q2 winners</b>
+        <div class="kv"><span>Nikhilesh · Delivery excellence</span><span>Syed · Customer impact</span><span>Shourya · Innovation</span></div>
+      </div>
+    </main>
+
+    <!-- ---------------- NOMINATION FORM ---------------- -->
+    <main id="view-nominate" class="view" role="region" aria-label="Nomination form" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">Nominate for Q3 Excellence</h1>
+          <p class="viewsub">The form auto-fills the candidate's manager and pulls their recognition record for the jury.</p>
+        </div>
+      </div>
+
+      <div class="card pad" style="max-width:640px">
+        <div class="field">
+          <label for="nomCand">Candidate</label>
+          <select id="nomCand">
+            <option value="Nikhilesh">Nikhilesh · Intern (18 recognitions this quarter)</option>
+            <option value="Syed">Syed · Intern (9)</option>
+            <option value="Shourya">Shourya · Intern (7)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Coverage</label>
+          <div class="fselect" id="nomCoverage">
+            <button class="fchip" aria-pressed="true" type="button">Delivery</button>
+            <button class="fchip" aria-pressed="false" type="button">Customer impact</button>
+            <button class="fchip" aria-pressed="false" type="button">Collaboration</button>
+            <button class="fchip" aria-pressed="false" type="button">Innovation</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="nomJust">Why they deserve it — name the work and its impact</label>
+          <textarea id="nomJust" placeholder="e.g. Nikhilesh resolved the failing test suite overnight twice this quarter, keeping the module demo on track…"></textarea>
+        </div>
+
+        <div class="aidlg">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <b style="font-size:13px">AI workflow review</b>
+            <button class="btn subtle sm" id="runAiBtn" type="button">Run AI review</button>
+          </div>
+          <div id="aiChecks" style="display:grid;gap:7px;margin-top:2px">
+            <div class="airow" data-check="Valid employee · reporting tree"><span class="tick" aria-hidden="true">✓</span> Eligible employee · active in reporting tree</div>
+            <div class="airow" data-check="Names work + impact"><span class="tick" aria-hidden="true">✓</span> Justification names the work and its impact</div>
+            <div class="airow" data-check="Supporting evidence"><span class="tick" aria-hidden="true">✓</span> Supporting evidence found in recognition history</div>
+            <div class="airow" data-check="No duplicate nomination"><span class="tick" aria-hidden="true">✓</span> No duplicate nomination this cycle</div>
+            <div class="airow" data-check="Policy compliance"><span class="tick" aria-hidden="true">✓</span> Policy compliance · awards guidelines</div>
+          </div>
+          <div id="aiSummary" hidden style="background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:12px;font-size:13px;line-height:1.55">
+            <b>AI summary for the jury</b><br>
+            <span id="aiSummaryText"></span>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
+          <button class="btn ghost" onclick="openView('awards')">Back</button>
+          <button class="btn primary" id="submitNom" disabled>Submit nomination</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ---------------- APPROVAL ---------------- -->
+    <main id="view-approval" class="view" role="region" aria-label="Approval" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">Nomination · track &amp; approve</h1>
+          <p class="viewsub">Routing follows the company tree automatically. Endorsement lets peers add weight without a second nomination.</p>
+        </div>
+        <span class="chip" id="nomChip">Q3 Excellence · draft</span>
+      </div>
+
+      <div class="grid2">
+        <div class="card pad">
+          <b>Approval chain</b>
+          <div class="tline" id="tl" style="margin-top:8px"></div>
+          <div id="mgrActions" style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn primary" id="approveBtn">Approve</button>
+            <button class="btn ghost" id="changesBtn">Request changes</button>
+            <button class="btn ghost" id="rejectBtn">Reject</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="card pad" style="margin-bottom:14px">
+            <b>Candidate</b>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+              <span class="avatar" style="width:40px;height:40px;font-size:14px" id="nomAv">N</span>
+              <div>
+                <b id="nomName" style="display:block">Nikhilesh</b>
+                <span style="font-size:12.5px;color:var(--muted)" id="nomMeta">Intern · reports to Prateesh</span>
+              </div>
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-top:12px;line-height:1.55" id="nomJustText">No justification yet — the AI review unlocks once you write one.</p>
+          </div>
+
+          <div class="card pad">
+            <b>Endorsements</b>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap">
+              <span class="chip" id="endorseCount">+6 peers</span>
+              <button class="btn ghost sm" id="endorseBtn">Endorse</button>
+            </div>
+            <p style="font-size:12.5px;color:var(--muted);margin-top:10px">
+              An intern nominated; Prateesh can add weight by endorsing instead of duplicating the paperwork.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ---------------- JURY ---------------- -->
+    <main id="view-jury" class="view" role="region" aria-label="Jury" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">Jury dashboard</h1>
+          <p class="viewsub">Everything a jury needs on one row — then they vote. AI output informs the vote; it never casts it.</p>
+        </div>
+        <button class="btn primary" id="declareBtn" hidden>Declare winner</button>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <table class="tb">
+          <thead>
+            <tr><th>Candidate</th><th>Recognitions</th><th>Impact</th><th>AI check</th><th>Endorsed</th><th>Vote</th></tr>
+          </thead>
+          <tbody id="juryRows"></tbody>
+        </table>
+      </div>
+
+      <div class="card pad" id="juryDetail"></div>
+    </main>
+
+    <!-- ---------------- WALLET ---------------- -->
+    <main id="view-wallet" class="view" role="region" aria-label="Wallet" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">My wallet</h1>
+          <p class="viewsub">Every point in and out — kudos rewards, manager boosts, EoQ awards, redemptions.</p>
+        </div>
+        <button class="btn gold" onclick="openView('market')">Redeem in marketplace <span aria-hidden="true">→</span></button>
+      </div>
+
+      <div class="grid2" style="margin-bottom:14px">
+        <div class="card pad walcard">
+          <div>
+            <div style="color:var(--muted);font-size:12.5px;font-weight:600">Available points</div>
+            <div class="bignum" id="walBal" style="color:var(--gold)">—</div>
+          </div>
+          <div class="kv" style="margin:0;gap:14px">
+            <span><span class="pos">+</span> <b id="walEarn">850</b> earned</span>
+            <span><span class="neg">−</span> <b id="walRed">0</b> redeemed</span>
+          </div>
+        </div>
+        <div class="card pad">
+          <b>How points arrive</b>
+          <div class="kv">
+            <span>🤝 Peer recognition <b class="num" style="margin-left:6px">0–100</b></span>
+            <span>⚡ Manager boost <b class="num" style="margin-left:6px">100–1,000</b></span>
+            <span>📊 Quarterly <b class="num" style="margin-left:6px">2,500</b></span>
+            <span>🏆 EoQ award <b class="num" style="margin-left:6px">5,000</b></span>
+            <span>🌟 Annual Pride <b class="num" style="margin-left:6px">10,000</b></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pad" style="padding-bottom:6px"><b>Ledger</b></div>
+        <table class="tb">
+          <thead><tr><th>Change</th><th>Why</th><th>When</th><th style="text-align:right">Balance</th></tr></thead>
+          <tbody id="ledgerRows"></tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- ---------------- MARKET ---------------- -->
+    <main id="view-market" class="view" role="region" aria-label="Rewards marketplace" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">Rewards marketplace</h1>
+          <p class="viewsub">10 points = ₹1. Vouchers and perks, delivered by the configured partner catalogue.</p>
+        </div>
+        <span class="chip gold">Balance · <span id="mktPts">—</span></span>
+      </div>
+
+      <div class="mkgrid" id="mktGrid"></div>
+    </main>
+
+    <!-- ---------------- TREE ---------------- -->
+    <main id="view-tree" class="view" role="region" aria-label="Company tree" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">Company tree</h1>
+          <p class="viewsub">Synced from the HR directory every night — it knows who reports to whom before anyone clicks.</p>
+        </div>
+      </div>
+
+      <div class="tree card" style="padding:30px 16px">
+        <div class="troot">
+          <div class="tnode"><span class="avatar gold">S</span><span><b>Shan</b><small>Manager L3 · org head</small></span></div>
+          <div class="tvl"></div>
+          <div class="tnode"><span class="avatar gold">P</span><span><b>Prastina</b><small>Manager L2 · senior manager</small></span></div>
+          <div class="tvl"></div>
+          <div class="tnode"><span class="avatar gold">P</span><span><b>Prateesh</b><small>Manager L1 · of the three interns</small></span></div>
+          <div class="tconnecting"><span class="h"></span></div>
+          <div class="tbranches">
+            <div class="tnode"><span class="avatar">N</span><span><b>Nikhilesh</b><small>Intern</small></span></div>
+            <div class="tnode"><span class="avatar">S</span><span><b>Syed</b><small>Intern</small></span></div>
+            <div class="tnode"><span class="avatar">S</span><span><b>Shourya</b><small>Intern</small></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:14px">
+        <div class="card pad">
+          <div class="syncnote" style="background:none;padding:0">
+            <span aria-hidden="true">🌐</span>
+            <span><b>What sync decides here:</b> peer kudos to any intern notifies Prateesh; the boost quarters come out of Prateesh's quota pool; EoQ flows Prastina → Shan → the awards office — the tree, not the person, decides.</span>
+          </div>
+        </div>
+        <div class="card pad">
+          <div class="syncnote" style="background:none;padding:0">
+            <span aria-hidden="true">🔐</span>
+            <span><b>Fresh from HR:</b> joins, exits and transfers change notification and approval routing the next morning — no manual admin in the portal.</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ---------------- AWARD RULES (Admin/HR) ---------------- -->
+    <main id="view-rules" class="view" role="region" aria-label="Award rules" hidden>
+      <div class="vhead">
+        <div>
+          <h1 class="viewtitle">Award rules — the quota registry</h1>
+          <p class="viewsub">Every award declares who gives it, its approval route, and <b>which manager carries the quota</b>. The carrier can differ per award — flip one and the whole flow follows.</p>
+        </div>
+        <span class="chip">Admin · HR view</span>
+      </div>
+
+      <div class="card">
+        <table class="tb">
+          <thead>
+            <tr><th>Award</th><th>Given by</th><th>Approval route</th><th>Quota carrier</th><th style="text-align:right">Carrier pool</th></tr>
+          </thead>
+          <tbody id="rulesBody"></tbody>
+        </table>
+      </div>
+
+      <div class="syncnote card" style="margin-top:14px;padding:14px">
+        <span aria-hidden="true">💡</span>
+        <span><b>The emids rule:</b> the quota-owning manager is not one fixed person — <b>each award type names its own carrier</b>.
+        Boost rides with Prateesh (L1), Quarterly with Prastina (L2), Annual with Shan (L3), the EoQ payout with the awards office.
+        Change a carrier here and every give/approval flow reads the new rule immediately.</span>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<!-- ================= kudos modal ================= -->
+<div class="ovl" id="mkudos" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Give kudos">
+    <div class="mh"><b>Give kudos</b><button class="xbtn" data-close="mkudos" aria-label="Close">✕</button></div>
+    <div class="mc">
+      <div class="field">
+        <label for="kto">Whom are you recognizing?</label>
+        <input type="text" id="kto" list="peopleList" placeholder="Search people… e.g. Syed" autocomplete="off">
+        <datalist id="peopleList">
+          <option value="Nikhilesh"><option value="Syed"><option value="Shourya">
+          <option value="Prateesh"><option value="Prastina"><option value="Shan">
+        </datalist>
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <div class="fselect" id="kCats">
+          <button class="fchip" aria-pressed="true" type="button">Collaboration</button>
+          <button class="fchip" aria-pressed="false" type="button">Innovation</button>
+          <button class="fchip" aria-pressed="false" type="button">Delivery</button>
+          <button class="fchip" aria-pressed="false" type="button">Customer impact</button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="kmsg">message</label>
+        <textarea id="kmsg" maxlength="400" placeholder="What did they do, and what did it unblock?"></textarea>
+      </div>
+
+      <div class="aidlg" style="margin-bottom:14px">
+        <b style="font-size:13px">AI agent check</b>
+        <div id="kAi" style="font-size:13px;color:var(--muted)">Start writing — the agent checks specificity, tone and policy as you type.</div>
+        <div id="kAiList" style="display:grid;gap:6px">
+          <div class="airow" data-k="Names a real contribution"><span class="tick" aria-hidden="true">✓</span> Names a real contribution</div>
+          <div class="airow" data-k="Positive tone"><span class="tick" aria-hidden="true">✓</span> Positive tone · clean language</div>
+          <div class="airow" data-k="Recipient matches directory"><span class="tick" aria-hidden="true">✓</span> Recipient matches the employee directory</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <button class="fchip" id="attachBtn" type="button" aria-pressed="false" style="background:var(--gold-soft);border-color:#EBDDBC;color:var(--gold)">🎁 Attach a reward (optional)</button>
+        <div id="kRewards" hidden class="givepop" style="margin-top:8px">
+          <span style="font-size:12.5px;color:var(--muted)">Peer cap <b>100 pts</b> — kudos stays free-to-give</span>
+          <span class="spacer"></span>
+          <button class="amtchip" data-amt="25" type="button">25</button>
+          <button class="amtchip" data-amt="50" type="button">50</button>
+          <button class="amtchip" data-amt="100" type="button">100</button>
+          <span id="kAmt" style="font-size:13px;font-weight:700;color:var(--gold)"></span>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn ghost" data-close="mkudos">Cancel</button>
+        <button class="btn primary" id="kSend">Send recognition</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= redeem modal ================= -->
+<div class="ovl" id="mredeem" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Confirm redemption" style="max-width:440px">
+    <div class="mh"><b>Confirm redemption</b><button class="xbtn" data-close="mredeem" aria-label="Close">✕</button></div>
+    <div class="mc">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+        <span class="mkimg" id="rdIcon" style="width:64px;height:64px;display:grid;place-items:center;font-size:26px;background:var(--bg);border:1px solid var(--line);border-radius:12px">🎟️</span>
+        <div>
+          <b id="rdName" style="display:block;font-size:15px">—</b>
+          <span style="color:var(--muted);font-size:13px" id="rdCost">—</span>
+        </div>
+      </div>
+      <div style="background:var(--bg);border-radius:var(--r-md);padding:12px 14px;font-size:13.5px;display:grid;gap:5px">
+        <div style="display:flex;justify-content:space-between"><span>Balance now</span><b id="rdBalNow">—</b></div>
+        <div style="display:flex;justify-content:space-between"><span>Redeeming</span><b class="neg" id="rdDeduct">—</b></div>
+        <div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:6px"><span>Balance after</span><b class="pos" id="rdBalAfter">—</b></div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px">
+        <button class="btn ghost" data-close="mredeem">Not now</button>
+        <button class="btn primary" id="rdGo">Redeem</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= redemption success ================= -->
+<div class="ovl" id="mdone" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Redemption done" style="max-width:400px;text-align:center">
+    <div class="mc" style="padding:26px">
+      <div style="font-size:40px">🎊</div>
+      <b style="font-size:17px;display:block;margin-top:6px">Voucher is on its way</b>
+      <p style="color:var(--muted);font-size:13.5px;margin-top:4px" id="dnTxt">—</p>
+      <span style="display:inline-block;margin-top:12px;background:var(--bg);border:1px dashed var(--line);border-radius:9px;padding:8px 12px;font-weight:700;letter-spacing:.08em" id="dnCode">APPL-XXXX</span>
+      <div style="margin-top:16px"><button class="btn primary" data-close="mdone">Done</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= winner overlay ================= -->
+<div class="ovl" id="mwin" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Winner" style="max-width:460px;position:relative;overflow:hidden">
+    <div class="winnerpass">
+      <span class="bigmedal" aria-hidden="true">🏆</span>
+      <span class="chip gold" style="font-size:12px">Q3 Excellence Award · Employee of the Quarter</span>
+      <b style="font-size:22px" id="winName">Nikhilesh</b>
+      <p style="color:var(--muted);max-width:330px" id="winWhy">—</p>
+      <span class="chip" style="font-size:13px">+5,000 points posted to the wallet ledger</span>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn primary" id="winWallet">Open wallet</button>
+        <button class="btn ghost" data-close="mwin">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= notifications drawer ================= -->
+<div class="drawer" id="notif" hidden>
+  <div class="shade" data-close="notif"></div>
+  <div class="panel" role="dialog" aria-modal="true" aria-label="Notifications">
+    <div class="nh"><b>Notifications</b><button class="xbtn" data-close="notif" aria-label="Close">✕</button></div>
+    <div id="notifList"></div>
+  </div>
+</div>
+
+<!-- ================= persona switcher drawer ================= -->
+<div class="drawer" id="pmenu" hidden>
+  <div class="shade" data-close="pmenu"></div>
+  <div class="panel" role="dialog" aria-modal="true" aria-label="Switch persona">
+    <div class="nh"><b>Switch persona — the 7 roles</b><button class="xbtn" data-close="pmenu" aria-label="Close">✕</button></div>
+    <p style="padding:12px 16px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line-soft)">
+      One team, seven points of view. The tree maps every persona to a real person:
+      <b>Shan</b> → L3, <b>Prastina</b> → L2, <b>Prateesh</b> → L1 &amp; budget, interns → employee/peer, the awards office → Admin/HR.
+    </p>
+    <div id="pmenuList"></div>
+  </div>
+</div>
+
+<!-- ================= walkthrough drawer ================= -->
+<div class="drawer" id="guide" hidden>
+  <div class="shade" data-close="guide"></div>
+  <div class="panel" role="dialog" aria-modal="true" aria-label="Product walkthrough">
+    <div class="nh"><b>Product walkthrough — the one-sentence journey</b><button class="xbtn" data-close="guide" aria-label="Close">✕</button></div>
+    <p style="padding:14px 16px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line-soft)">
+      An employee recognizes a colleague in seconds; the system resolves the manager through the company tree;
+      the AI agent validates and routes the workflow; exceptional work is nominated for quarterly awards;
+      winners earn points — collected in a wallet and redeemed in the marketplace.
+    </p>
+    <div id="guideList"></div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   Applause · clickable R&R prototype — demo state & wiring
+   ============================================================ */
+const fmt = n => n.toLocaleString('en-IN');
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+/* ---------- personas (the 7) + real team ---------- */
+const PERSONAS = [
+  {pid:'employee', label:'Employee',                    who:'Receives awards · earns and spends points', roleKey:'Nikhilesh'},
+  {pid:'peer',     label:'Peer Employee',               who:'Peer kudos · attaches ≤100-pt peer rewards', roleKey:'Syed'},
+  {pid:'l1',       label:'Manager L1',                  who:'Manager of three · carries the Manager boost quota', roleKey:'Prateesh'},
+  {pid:'l2',       label:'Manager L2',                  who:'Senior manager · carries Quarterly Excellence quota', roleKey:'Prastina'},
+  {pid:'l3',       label:'Manager L3',                  who:'Org head · carries Annual Pride quota', roleKey:'Shan'},
+  {pid:'qb',       label:'Manager with Quota & Budget', who:'The quota-holder who changes per award — see Award rules', roleKey:'Prateesh', lens:'rules'},
+  {pid:'admin',    label:'Admin / HR',                  who:'Rules, quota pools, ballot clearance, jury chair', roleKey:'OFFICE', lens:'rules'},
+];
+const ROLES = {
+  Nikhilesh:{name:'Nikhilesh', init:'N', cls:'',     role:'Intern',                          persona:'employee'},
+  Syed:     {name:'Syed',      init:'S', cls:'',     role:'Intern',                          persona:'peer'},
+  Shourya:  {name:'Shourya',   init:'S', cls:'',     role:'Intern',                          persona:'employee'},
+  Prateesh: {name:'Prateesh',  init:'P', cls:'gold', role:'Manager L1 · budget owner',       persona:'l1'},
+  Prastina: {name:'Prastina',  init:'P', cls:'gold', role:'Manager L2 · senior manager',     persona:'l2'},
+  Shan:     {name:'Shan',      init:'S', cls:'gold', role:'Manager L3 · org head',           persona:'l3'},
+  OFFICE:   {name:'Awards office', init:'⚖', cls:'gold', role:'Admin / HR · jury chair',     persona:'admin'},
+};
+const DIR = ['Nikhilesh','Syed','Shourya','Prateesh','Prastina','Shan'];
+const WALLET_OWNER = 'Nikhilesh';
+/* which manager carries each award's quota — edit right here or in Award rules */
+const AWARDS = [
+  {id:'kudos',  icon:'🤝', name:'Kudos thanks',          p:'free',       given:'Anyone (Employee · Peer)',   route:['No approval — always free'], carrier:'',   note:'Recognition and money are separate by design'},
+  {id:'peer',   icon:'🎁', name:'Peer reward',           p:'≤ 100 pts',  given:'Peer / Employee',            route:['Cap check (auto · max 100)'], carrier:'OFFICE', note:'Paid from the program pool'},
+  {id:'boost',  icon:'⚡', name:'Manager boost',         p:'100–1,000',  given:'Manager L1',                 route:['Pool guard (10,000/mo)'],    carrier:'Prateesh', note:'Deducted live from the carrier pool'},
+  {id:'quarterly', icon:'📊', name:'Quarterly Excellence', p:'2,500',   given:'Manager L1 (above boost)',   route:['L1 draft','L2 approval','carrier deduct'], carrier:'Prastina'},
+  {id:'annual', icon:'🌟', name:'Annual Pride',          p:'10,000',     given:'Managers L2 / L3',           route:['L2 review','L3 approval','carrier deduct'], carrier:'Shan'},
+  {id:'eoc',    icon:'🏆', name:'Employee of the Quarter', p:'5,000',    given:'Nomination (manager/peer)',  route:['AI review','L1 (intern nomination)','L2','L3','Office clears · ballot','Jury votes'], carrier:'OFFICE'},
+];
+const CARRIER_POOL = {
+  Prateesh:{label:'Prateesh · L1 pool', total:10000, used:6500},
+  Prastina:{label:'Prastina · L2 pool', total:25000, used:9000},
+  Shan:    {label:'Shan · L3 pool',     total:50000, used:20000},
+  OFFICE:  {label:'Awards office pool', total:40000, used:12000},
+};
+
+const S = {
+  role:'Nikhilesh',
+  persona:'employee',
+  points:850, earned:850, redeemed:0,
+  ledger:[
+    {v:+500, why:'Welcome bonus',            when:'12 Jun'},
+    {v:+350, why:'Spot award · FixIt Friday',when:'28 Jul'},
+  ],
+  posts:[
+    {id:1,by:'Syed',to:'Nikhilesh',cat:'Delivery',
+     msg:'Nikhilesh rebuilt the failing test cases overnight so the module demo stayed on track. Really appreciate the clutch support!',
+     pts:100,likes:12,liked:false,comments:3,time:'2h ago'},
+    {id:2,by:'Shourya',to:'Nikhilesh',cat:'Collaboration',
+     msg:'Pair-reviewed my dashboard build before every walkthrough — patient, precise, every single time.',
+     pts:0,likes:7,liked:false,comments:1,time:'1d ago'},
+    {id:3,by:'Prateesh',to:'Syed',cat:'Collaboration',
+     msg:'The migration checklist Syed drafted was thorough — saved hours for two teams.',
+     pts:100,likes:5,liked:false,comments:0,time:'3d ago'},
+  ],
+  endorse:{count:6,mine:false},
+  nom:{state:'draft',cand:'Nikhilesh',just:'',route:null,step:0,nomBy:null},
+  votes:new Set(),
+  winner:false,
+  notifs:{
+    Nikhilesh:[{b:'You were recognized by Syed',p:'“…rebuilt the failing test cases overnight…” · +100 peer pts landed in the wallet.',t:'now'}],
+    Syed:[
+      {b:'Prateesh gave you a boost',p:'“…migration checklist was thorough…” · +100 from the L1 quota pool.',t:'3d ago'},
+    ],
+    Shourya:[{b:'Q3 award intake is open',p:'Recognition history builds the nomination evidence — keep the kudos coming.',t:'today'}],
+    Prateesh:[
+      {b:'Syed recognized Nikhilesh',p:'Delivery · “rebuilt the failing test cases” · +100 peer pts. Boost or endorse from your dashboard.',t:'2h ago'},
+      {b:'Q3 nomination might be due',p:'Nikhilesh carries 18 recognitions this quarter — a strong EoQ signal.',t:'today'}
+    ],
+    Prastina:[
+      {b:'A nomination may reach you',p:'Employee-of-the-Quarter files pass your desk (L2) before Shan.',t:'today'}
+    ],
+    Shan:[],
+    OFFICE:[{b:'Q3 ballot will close 30 Sep',p:'Jury fills up as nominations clear the tree — office clears the ballot last.',t:'today'}],
+  },
+  unread:{Nikhilesh:0,Syed:0,Shourya:0,Prateesh:1,Prastina:1,Shan:0,OFFICE:1},
+  mkt:[
+    {id:'amz500', icon:'📦', name:'₹500 Amazon voucher',  cost:1000},
+    {id:'fk2k',   icon:'🛒', name:'₹2,000 Flipkart card', cost:4000},
+    {id:'swig',   icon:'🍛', name:'₹300 Swiggy order',    cost:600},
+    {id:'movie',  icon:'🎬', name:'Movie night · 2 seats',cost:500},
+    {id:'coffee', icon:'☕', name:'Specialty coffee · ₹200',cost:200},
+  ],
+};
+
+/* ---------- utils ---------- */
+function toast(m, key='✓'){
+  const t=document.createElement('div'); t.className='toast';
+  t.innerHTML=`<span class="tk">${key}</span><span>${m}</span>`;
+  $('#toasts').appendChild(t); setTimeout(()=>t.remove(),4200);
+}
+function ledBal(){ // running balance ascending
+  let bal=0;
+  return S.ledger.map(e=>{bal+=e.v;return{...e,bal}});
+}
+function credit(v,why,when='just now',quiet=false){
+  S.points+=v; S.earned+=v; S.ledger.push({v:+v,why,when});
+  syncWallet(); if(!quiet) toast(`<b>+${fmt(v)}</b> points added to ${WALLET_OWNER}'s wallet — now ${fmt(S.points)}.`);
+}
+function debit(v,why,when='just now'){
+  S.points-=v; S.redeemed+=v; S.ledger.push({v:-v,why,when});
+  syncWallet();
+}
+
+/* ---------- topbar sync ---------- */
+function syncWallet(){
+  $('#topPts').textContent = fmt(S.points)+' pts';
+  $('#sidePts').textContent = fmt(S.points);
+  $('#walBal').textContent = fmt(S.points);
+  $('#walEarn').textContent = fmt(S.earned);
+  $('#walRed').textContent = fmt(S.redeemed);
+  $('#mktPts').textContent = fmt(S.points);
+  const rows=[...ledBal()].reverse().map(e=>`
+    <tr>
+      <td class="num ${e.v>0?'pos':'neg'}">${e.v>0?'+':''}${fmt(e.v)}</td>
+      <td>${e.why}</td>
+      <td style="color:var(--muted)">${e.when}</td>
+      <td class="num" style="text-align:right">${fmt(e.bal)}</td>
+    </tr>`).join('');
+  $('#ledgerRows').innerHTML = rows;
+}
+function syncRole(){
+  const r=ROLES[S.role];
+  $('#roleName').textContent=r.name; $('#roleRole').textContent=r.role;
+  $('#roleAv').textContent=r.init; $('#roleAv').className='avatar '+r.cls;
+  $('#composerAv').textContent=r.init; $('#composerAv').className='avatar '+r.cls;
+  $('#bellCount').hidden = !(S.unread[S.role]>0);
+  if(S.unread[S.role]>0) $('#bellCount').textContent=S.unread[S.role];
+}
+
+/* ---------- nav ---------- */
+function openView(v){
+  $$('.view[id^=view-]').forEach(el=>el.hidden=true);
+  const el=$('#view-'+v); if(el) el.hidden=false;
+  $$('.nav [data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  if(v==='manager') renderManager();
+  if(v==='awards')  renderAwards();
+  if(v==='jury')    renderJury();
+  if(v==='approval') renderApproval();
+  if(v==='rules'&&typeof renderRules==='function') renderRules();
+}
+document.addEventListener('click',e=>{
+  const nb=e.target.closest('[data-view]');
+  if(nb){openView(nb.dataset.view);}
+  const cb=e.target.closest('[data-close]');
+  if(cb){$('#'+cb.dataset.close).hidden=true;}
+});
+$('#giveKudosBtn').addEventListener('click',openKudos);
+$('#composerFake').addEventListener('click',openKudos);
+$('#guideBtn').addEventListener('click',()=>{renderGuide();$('#guide').hidden=false;});
+$('#bellBtn').addEventListener('click',()=>{
+  S.unread[S.role]=0; syncRole(); renderNotifs(); $('#notif').hidden=false;
+});
+
+/* ---------- feed ---------- */
+function renderFeed(){
+  $('#feedlist').innerHTML = S.posts.map(p=>`
+    <article class="card post">
+      <div class="ph">
+        <span class="avatar">${ROLES[p.by]?.init||'⭐'}</span>
+        <div class="meta">
+          <b>${p.by}</b> recognized <b>${p.to}</b><br>
+          <small>${p.time}${p.pts?` · +${fmt(p.pts)} pts`:''}</small>
+        </div>
+        <span class="chip" style="margin-left:auto">${p.cat}</span>
+      </div>
+      <p class="msg">${p.msg}</p>
+      <div class="pfoot">
+        <button class="heartbtn ${p.liked?'on':''}" data-like="${p.id}" aria-pressed="${p.liked}">
+          <span aria-hidden="true">♥</span><span class="footnum">${p.likes}</span>
+        </button>
+        <span style="font-size:12.5px;color:var(--muted)">💬 <span class="footnum">${p.comments}</span> comments</span>
+        ${p.official?`<span class="chip gold">Official award</span>`:''}
+      </div>
+    </article>`).join('');
+}
+document.addEventListener('click',e=>{
+  const hb=e.target.closest('[data-like]');
+  if(hb){
+    const p=S.posts.find(x=>String(x.id)===hb.dataset.like);
+    p.liked=!p.liked; p.likes+=p.liked?1:-1; renderFeed();
+    if(!$('#view-manager').hidden)renderManager();
+  }
+});
+
+/* ---------- kudos modal ---------- */
+let kCat='Collaboration', kAmtVal=0;
+function openKudos(){
+  $('#mkudos').hidden=false;
+  $('#kto').value=''; $('#kmsg').value=''; kAmtVal=0;
+  $('#kmsg').focus();
+}
+$('#kCats').addEventListener('click',e=>{
+  const c=e.target.closest('.fchip'); if(!c)return;
+  kCat=c.textContent.trim();
+  $$('#kCats .fchip').forEach(x=>x.setAttribute('aria-pressed',x===c));
+});
+$('#nomCoverage').addEventListener('click',e=>{
+  const c=e.target.closest('.fchip'); if(!c)return;
+  $$('#nomCoverage .fchip').forEach(x=>x.setAttribute('aria-pressed',x===c));
+});
+$('#attachBtn').addEventListener('click',()=>{
+  const on=$('#attachBtn').getAttribute('aria-pressed')==='true';
+  $('#attachBtn').setAttribute('aria-pressed',String(!on));
+  $('#kRewards').hidden=on; if(on){kAmtVal=0;$('#kAmt').textContent='';}
+});
+$$('#kRewards .amtchip').forEach(b=>b.addEventListener('click',()=>{
+  kAmtVal=+b.dataset.amt; $('#kAmt').textContent='+'+kAmtVal+' pts';
+}));
+const VAGUE=/^\s*(a )?(reall?y)?\s*(good|nice|great|awesome|helpful|excellent|the best)[\w\s.!?]*$/i;
+function kudosCheck(){
+  const msg=$('#kmsg').value.trim(), to=$('#kto').value.trim();
+  const bars=$$('#kAiList .airow');
+  bars.forEach(b=>b.classList.remove('done'));
+  const ai=$('#kAi');
+  if(!msg){
+    ai.style.color='var(--muted)';
+    ai.textContent='Start writing — the agent checks specificity, tone and policy as you type.';
+    return;
+  }
+  const specific=msg.length>=30 && !VAGUE.test(msg);
+  if(!specific){
+    bars[1].classList.add('done');
+    ai.style.color='var(--red)';
+    ai.innerHTML=`<b>Recognition could be more specific.</b> Tell us what ${to||'they'} did and what impact it created — the agent will re-validate as you edit.`;
+  }else{
+    bars.forEach(b=>b.classList.add('done'));
+    ai.style.color='var(--green)';
+    if(DIR.map(d=>d.toLowerCase()).includes(to.toLowerCase())){
+      ai.textContent='✓ Valid employee · ✓ positive tone · ✓ specific contribution — ready to send.';
+    }else{
+      ai.style.color='var(--red)';
+      ai.textContent='✓ Specific · ✓ tone ok · ⚠ recipient not found in the HR directory.';
+    }
+  }
+}
+$('#kmsg').addEventListener('input',kudosCheck);
+$('#kto').addEventListener('input',kudosCheck);
+$('#kSend').addEventListener('click',()=>{
+  const msg=$('#kmsg').value.trim(), to=$('#kto').value.trim();
+  if(!DIR.map(d=>d.toLowerCase()).includes(to.toLowerCase())){
+    toast('Pick a teammate from the directory — the tree needs a real recipient.','⚠'); return;
+  }
+  if(msg.length<30){toast('Recognition needs a little more detail to clear the AI check.','⚠');return;}
+  const toName=DIR.find(d=>d.toLowerCase()===to.toLowerCase());
+  S.posts.unshift({id:Date.now(),by:ROLES[S.role].name,to:toName,cat:kCat,msg,
+    pts:kAmtVal,likes:0,liked:false,comments:0,time:'just now'});
+  $('#mkudos').hidden=true; renderFeed(); openView('feed');
+  toast(`Recognition sent to <b>${toName}</b>.`);
+  if(kAmtVal>0){
+    const peerAward=AWARDS.find(a=>a.id==='peer');
+    const pool=CARRIER_POOL[peerAward.carrier]||CARRIER_POOL.OFFICE;
+    pool.used=Math.min(pool.used+kAmtVal,pool.total);
+    if(typeof renderRules==='function')renderRules();
+    if(toName===WALLET_OWNER){
+      credit(kAmtVal,'Peer reward from '+ROLES[S.role].name+' · '+pool.label);
+    }else{
+      toast(`<b>${toName}</b> received +${fmt(kAmtVal)} peer points (demo wallet shows ${WALLET_OWNER}'s ledger).`);
+      pushNotif(toName,`${ROLES[S.role].name} gave you peer points`,`+${fmt(kAmtVal)} · paid from ${pool.label}.`);
+    }
+    toast(`${ROLES[S.role].name} attached +${fmt(kAmtVal)} peer reward points — cap 100 · carrier: ${ROLES[peerAward.carrier]?.name||'program'}.`);
+  }
+});
+</script>
+
+<script>
+/* ================= manager ================= */
+const isManager = () => ['l1','l2','l3','qb'].includes(ROLES[S.role].persona);
+function poolForCarrier(car){return CARRIER_POOL[car];}
+function carrierAwards(car){return AWARDS.filter(a=>a.carrier===car);}
+function renderManager(){
+  const head=$('#mgrHead');
+  const r=ROLES[S.role];
+  if(head) head.textContent = isManager() ? `${r.name}'s desk — ${fmtCycleLabel()}` : `${r.name} — recognition trail`;
+  /* budget card visibility: only managers see pools; the label follows the registry */
+  $('#mBudgetCard').hidden = !isManager();
+  if(isManager()){
+    const pool=poolForCarrier(S.role);
+    const mine=carrierAwards(S.role);
+    const left=pool.total-pool.used;
+    $('#bTitle').textContent=pool.label;
+    $('#bAwards').innerHTML=mine.map(a=>`<span class="chip gold">${a.icon} ${a.name}</span>`).join('')||'<span class="chip gray">carries no quota right now</span>';
+    $('#bUsed').textContent=fmt(pool.used)+' used';
+    $('#bBar').style.width=(pool.used/pool.total*100)+'%';
+    $('#bLeft').textContent=fmt(left)+' left';
+  }
+  const team=S.posts.filter(p=>['Nikhilesh','Syed','Shourya'].includes(p.to));
+  const seen=new Set();
+  $('#teamRecList').innerHTML=team.map(p=>{
+    const dup=seen.has(p.id); seen.add(p.id);
+    const boostOK=isManager()&&p.to!==S.role;
+    return `
+    <div class="member">
+      <span class="avatar">${ROLES[p.by]?.init||'⭐'}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13.5px;display:flex;gap:6px;flex-wrap:wrap">
+          <b>${p.by}</b><span style="color:var(--muted)">recognized</span><b>${p.to}</b>
+          ${p.pts?`<span class="chip gold">+${fmt(p.pts)} ${p.by==='Prateesh'?'boost pts':'peer pts'}</span>`:''}
+        </div>
+        <div style="font-size:13px;color:var(--muted)">${p.msg}</div>
+        ${boostOK?`
+        <div class="givepop" style="display:none" data-pop="${p.id}">
+          <span style="font-size:12.5px;font-weight:600">Boost for ${p.to}</span>
+          <button class="amtchip" data-give="${p.id}" data-v="100">100</button>
+          <button class="amtchip" data-give="${p.id}" data-v="500">500</button>
+          <button class="amtchip" data-give="${p.id}" data-v="1000">1,000</button>
+          <span class="warnbox" style="width:100%" data-warn="${p.id}" hidden>Only <b>&nbsp;${fmt(poolUsedLeft())}&nbsp;</b> left this month — give less or request budget.</span>
+        </div>`:''}
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button class="btn ghost sm" data-like="${p.id}">♥</button>
+        ${boostOK?`<button class="btn ghost sm" data-popbtn="${p.id}">＋ points</button>`:''}
+        ${isManager()?`<button class="btn subtle sm" data-nom="${p.to}">Nominate</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function fmtCycleLabel(){return 'February cycle · team of three';}
+function poolUsedLeft(){const pool=poolForCarrier(S.role);return pool.total-pool.used;}
+document.addEventListener('click',e=>{
+  const pb=e.target.closest('[data-popbtn]');
+  if(pb){const el=$(`[data-pop="${pb.dataset.popbtn}"]`);el.style.display=el.style.display==='none'?'flex':'none';}
+  const gb=e.target.closest('[data-give]');
+  if(gb){
+    const v=+gb.dataset.v, left=poolUsedLeft();
+    if(v>left){$(`[data-warn="${gb.dataset.give}"]`).hidden=false;return;}
+    const boost=AWARDS.find(a=>a.id==='boost');
+    const pool=poolForCarrier(boost.carrier);
+    if(ROLES[S.role].name!==ROLES[boost.carrier].name){
+      toast('Boost quota is carried by <b>'+ROLES[boost.carrier].name+'</b> per the Award rules — flip the carrier there to change who pays.','ℹ️');return;
+    }
+    pool.used+=v;
+    const rec=S.posts.find(p=>String(p.id)===gb.dataset.give)?.to;
+    const who=$(`[data-pop="${gb.dataset.give}"]`);
+    who.style.display='none';
+    if(rec===WALLET_OWNER)credit(v,'Manager boost from '+ROLES[boost.carrier].name+' · '+pool.label);
+    else toast(`Gave <b>${rec}</b> +${fmt(v)} points · ${fmt(pool.total-pool.used)} left this month.`);
+    pushNotif(rec,`${ROLES[S.role].name} recognized you`,`${v} boost points · from ${pool.label}.`);
+    renderManager(); if(typeof renderJury==='function')renderJury(); if(typeof renderRules==='function')renderRules();
+  }
+  const nb=e.target.closest('[data-nom]');
+  if(nb){S.nom.cand=nb.dataset.nom;openView('nominate');prefillNom();}
+});
+$('#reqBudgetBtn').addEventListener('click',()=>{
+  const esc={Prateesh:'Prastina',Prastina:'Shan',Shan:'OFFICE'}[S.role]||'Prastina';
+  toast(S.role==='Shan'
+    ? 'Request sent to the awards office — a +4,000 top-up for next month.'
+    : `Budget request routed to <b>${ROLES[esc].name}</b> via the company tree — +2,000 top-up requested.`);
+  pushNotif(esc,'Budget top-up requested',`${ROLES[S.role].name} asked for +2,000 on their monthly pool.`);
+});
+
+/* ================= awards hub ================= */
+const CANDS=[
+  {n:'Nikhilesh', peer:'18 recognitions · 6 manager', note:'Twice resolved the failing test suite overnight; kept the module demo on track.', av:'N'},
+  {n:'Syed', peer:'9 recognitions', note:'Ran the migration checklist that two teams reused.', av:'S'},
+  {n:'Shourya', peer:'7 recognitions', note:'Homegrown data validator now used by three product teams.', av:'S'},
+];
+function renderAwards(){
+  $('#candGrid').innerHTML=CANDS.map(c=>`
+    <div class="card pad cand">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="avatar">${c.av}</span><b>${c.n}</b>
+        ${S.nom.state!=='draft'&&S.nom.cand===c.n?'<span class="chip" style="margin-left:auto">submitted ✓</span>':''}
+      </div>
+      <span style="color:var(--muted);font-size:12.5px">${c.peer}</span>
+      <p style="font-size:13px;min-height:57px">${c.note}</p>
+      <button class="btn ghost" data-cand="${c.n}" style="justify-content:center">Nominate ${c.n.split(' ')[0]}</button>
+    </div>`).join('');
+  $('#awardStatusLine').textContent = S.nom.state==='draft'
+    ? 'No nomination submitted by you this quarter.'
+    : `Q3 Excellence · ${S.nom.cand} — status: ${nomStatusLine()}`;
+}
+document.addEventListener('click',e=>{
+  const cb=e.target.closest('[data-cand]');
+  if(cb){S.nom.cand=cb.dataset.cand;openView('nominate');prefillNom();}
+});
+
+/* ================= nomination form ================= */
+function prefillNom(){
+  const c=CANDS.find(x=>x.n===S.nom.cand)||CANDS[0];
+  $('#nomCand').value=c.n;
+  $('#nomJust').value=S.nom.just||'';
+  $('#aiSummary').hidden=true; $('#submitNom').disabled=true;
+  $$('#aiChecks .airow').forEach(r=>r.classList.remove('done'));
+  renderNomMeta();
+}
+$('#nomCand').addEventListener('change',()=>{S.nom.cand=$('#nomCand').value;renderNomMeta();});
+function renderNomMeta(){
+  $('#nomMeta').textContent=`${$('#nomCand').selectedOptions[0].text.split('(').shift()} · reports to Prateesh — approval starts there`;
+}
+
+/* ================= approval — routes read live from the registry ================= */
+const EOC_ROW=()=>AWARDS.find(a=>a.id==='eoc');
+function buildRoute(nomByRoleKey){
+  const internNom=['Nikhilesh','Syed','Shourya'].includes(nomByRoleKey);
+  return internNom?['Prateesh','Prastina','Shan','OFFICE']:['Prastina','Shan','OFFICE'];
+}
+function nomStatusLine(){
+  const st=S.nom;
+  if(st.state==='draft')return 'draft';
+  if(st.state==='done')return 'winner';
+  const r=ROLES[EOC_ROW().carrier]||ROLES.OFFICE;
+  if(st.finalCleared)return `ballot cleared by ${r.name} — jury is live`;
+  if(st.step>=st.route.length)return 'clearance complete';
+  return `waiting for ${ROLES[st.route[st.step]]?.name} (${ROLES[st.route[st.step]]?.role.split('·')[0].trim()})`;
+}
+function renderApproval(){
+  const st=S.nom;
+  const steps=[];
+  steps.push(['Submission','received & AI-reviewed',st.state!=='draft',st.state==='draft']);
+  const rt=st.route||[];
+  rt.forEach((key,i)=>{
+    const r=ROLES[key];
+    steps.push([
+      `${r.name} · ${r.role.split('·')[0].replace('Admin / HR','Awards office').trim()}`,
+      i===st.route.length-1?'ballot opens after sign-off':(key==='Prateesh'?'routing from the company tree — intern nomination':'tree-routed escalation'),
+      st.state==='done'||st.step>i||st.finalCleared,
+      !st.finalCleared&&st.state!=='draft'&&st.state!=='done'&&st.step===i,
+    ]);
+  });
+  $('#tl').innerHTML=steps.map(([t,d,done,now])=>`
+    <div class="tstep ${done?'done':now?'now':''}">
+      <span class="st">${done?'approved':now?'in progress':'waiting'}</span>
+      <div><b>${t}</b><div style="font-size:12.5px;color:var(--muted)">${d}</div></div>
+    </div>`).join('');
+  $('#nomName').textContent=st.cand;
+  $('#nomAv').textContent=(CANDS.find(x=>x.n===st.cand)||CANDS[0]).av;
+  $('#nomJustText').textContent=st.just||'No justification yet — the AI review unlocks once you write one.';
+  $('#nomChip').textContent=`Q3 Excellence · ${nomStatusLine()}`;
+  $('#endorseCount').textContent=`+${S.endorse.count} peers${S.endorse.mine?' + you':''}`;
+  $('#endorseBtn').disabled=S.endorse.mine||st.state==='draft';
+  /* approve gated to whoever is the CURRENT route step */
+  const waitKey=(st.route||[])[st.step];
+  const canApprove=st.state==='submitted'&&!st.finalCleared&&S.role===waitKey;
+  $('#mgrActions').hidden=!canApprove;
+  if(canApprove)$('#approveBtn').textContent=`Approve (as ${ROLES[waitKey].name})`;
+}
+$('#endorseBtn').addEventListener('click',()=>{
+  S.endorse.mine=true;S.endorse.count++;renderApproval();
+  toast(`Endorsed — ${S.nom.cand} now carries ${S.endorse.count} peer endorsements.`);
+});
+function advanceApproval(){
+  const st=S.nom;
+  const approver=ROLES[st.route[st.step]];
+  st.step=(st.step??0)+1;
+  if(st.step>=st.route.length){st.finalCleared=true;}
+  renderApproval();
+  if(st.finalCleared){
+    toast(`<b>${approver.name}</b> signed off · the awards office cleared it — <b>Q3 ballot is live</b>.`);
+    setTimeout(renderJury,300);
+  }else{
+    const next=ROLES[st.route[st.step]];
+    toast(`Approved by <b>${ROLES[S.role].name}</b> — routed to <b>${next.name}</b> (${next.role.split('·')[0].trim()}) via the tree.`);
+  }
+}
+$('#approveBtn').addEventListener('click',advanceApproval);
+$('#changesBtn').addEventListener('click',()=>{
+  pushNotif(S.nom.cand,'Changes requested',`${ROLES[S.role].name} asked for small wording changes on the nomination.`);
+  toast(`${ROLES[S.role].name} requested small wording changes — ${S.nom.cand} got a notice.`,'✏️');
+});
+$('#rejectBtn').addEventListener('click',()=>{
+  S.nom={state:'draft',cand:S.nom.cand,just:'',route:null,step:0,nomBy:null,finalCleared:false};
+  renderApproval();toast('Nomination rejected — the slot can be reused this cycle.','✖');
+});
+
+/* ================= jury ================= */
+function renderJury(){
+  const rows=[
+    {n:'Nikhilesh',peer:18,stars:'★★★★★',ok:true},
+    {n:'Syed',peer:14,stars:'★★★★',ok:true},
+    {n:'Shourya',peer:11,stars:'★★★★',ok:true},
+  ];
+  const onBallot=S.nom.finalCleared||S.nom.state==='done';
+  $('#juryRows').innerHTML=rows.map(r=>`
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:9px">
+        <span class="avatar">${r.n[0]}</span><b>${r.n}</b>
+        ${r.n===S.nom.cand&&onBallot?'<span class="chip">new</span>':''}
+      </div></td>
+      <td class="num">${r.peer}</td><td>${r.stars}</td>
+      <td>${r.ok?'<span style="color:var(--green);font-weight:700">✓</span>':'—'}</td>
+      <td>${r.n===S.nom.cand||r.n==='Nikhilesh'?`+${S.endorse.count}`:'+'+(4+r.peer%9)}</td>
+      <td style="text-align:right">
+        <button class="btn sm ${S.votes.has(r.n)?'subtle':'ghost'}" data-vote="${r.n}" ${S.winner?'disabled':''}>
+          ${S.votes.has(r.n)?'voted ✓':'vote'}
+        </button>
+      </td>
+    </tr>`).join('');
+  $('#declareBtn').hidden=!(S.votes.size>0&&!S.winner);
+  const lead=[...S.votes][0]||'—';
+  $('#juryDetail').innerHTML=`
+    <b>Reading the room</b>
+    <p style="font-size:13px;color:var(--muted);margin-top:6px;line-height:1.55">
+      Every row carries its recognition history, endorsements and the AI-drafted summary.
+      ${S.votes.size?`<b>${lead}</b> currently ${S.votes.size>1?'holds the votes':'holds a vote'}. The committee returns the call — the summary never casts it.`:
+      'Nikhilesh’s file: 18 peer + 6 manager recognitions across 3 teams, one major customer save — the AI summary is drafted, humans decide.'}
+    </p>`;
+}
+document.addEventListener('click',e=>{
+  const vb=e.target.closest('[data-vote]');
+  if(vb&&!S.winner){S.votes.has(vb.dataset.vote)?S.votes.delete(vb.dataset.vote):S.votes.add(vb.dataset.vote);renderJury();}
+});
+$('#declareBtn').addEventListener('click',()=>{
+  const win=[...S.votes][0]||'Nikhilesh';
+  S.winner=true;S.nom.state='done';
+  const carrier=EOC_ROW().carrier, pool=poolForCarrier(carrier);
+  pool.used=Math.min(pool.used+5000,pool.total);
+  credit(5000,'EoQ award · Q3 Excellence ('+win+') · carrier '+ROLES[carrier].name+(win!==WALLET_OWNER?' — shown in the demo wallet':''));
+  S.posts.unshift({id:'award',by:'Applause',to:win,cat:'EoQ · Q3 Excellence',
+    msg:'Q3 Excellence Award — for the quarter’s standout contribution. Official recognition from the awards committee.',
+    pts:5000,likes:0,liked:false,comments:0,time:'just now',official:true});
+  $('#winName').textContent=win;
+  $('#winWhy').textContent=(CANDS.find(c=>c.n===win)||CANDS[0]).note;
+  renderJury();renderFeed();if(typeof renderRules==='function')renderRules();renderManager();
+  $('#mwin').hidden=false;
+});
+$('#winWallet').addEventListener('click',()=>{
+  $('#mwin').hidden=true;openView('wallet');
+});
+</script>
+
+<script>
+/* ================= run-AI + submit (nominate view) ================= */
+const AI_STEPS=['Valid employee · reporting tree','Names work + impact','Supporting evidence','No duplicate nomination','Policy compliance'];
+$('#runAiBtn').addEventListener('click',()=>{
+  const just=$('#nomJust').value.trim();
+  if(just.length<40){toast('Write at least a sentence about the work and its impact first.','⚠');return;}
+  S.nom.just=just;
+  const rows=$$('#aiChecks .airow');
+  rows.forEach(r=>{r.classList.remove('done');r.querySelector('.tick').outerHTML='<span class="spin" aria-hidden="true"></span>';});
+  rows.forEach((r,i)=>setTimeout(()=>{
+    r.querySelector('.spin')?.remove();
+    r.classList.add('done');
+    tickify(r);
+    if(i===rows.length-1){
+      const c=CANDS.find(x=>x.n===S.nom.cand)||CANDS[0];
+      $('#aiSummaryText').textContent=
+        `${S.nom.cand} recorded ${c.peer} this quarter. Selected evidence: ${c.note} `+
+        `Coverage: ${covText()}. Drafted for jury review — the committee votes independently.`;
+      $('#aiSummary').hidden=false;
+      $('#submitNom').disabled=false;
+      toast('AI review passed — summary drafted for the jury.');
+    }
+  },380*(i+1)));
+});
+function tickify(r){ if(!r.querySelector('.tick')) r.insertAdjacentHTML('afterbegin','<span class="tick" aria-hidden="true">✓</span>'); }
+function covText(){
+  const on=$$('#nomCoverage .fchip').find(c=>c.getAttribute('aria-pressed')==='true');
+  return on?on.textContent.trim():'—';
+}
+$('#nomJust').addEventListener('input',()=>{
+  if($('#nomJust').value.trim().length>=40&&$$('#aiChecks .airow.done').length<5)return;
+  if($('#nomJust').value.trim()===''){$('#submitNom').disabled=true;$('#aiSummary').hidden=true;}
+});
+$('#submitNom').addEventListener('click',()=>{
+  S.nom.state='submitted';S.nom.nomBy=S.role;
+  S.nom.route=buildRoute(S.role);S.nom.step=0;S.nom.finalCleared=false;
+  const first=ROLES[S.nom.route[0]];
+  toast(`Nomination submitted — routing to <b>${first.name}</b> (${ROLES[S.role].name} nominated · tree decides the start)`,'🧭');
+  openView('approval');renderApproval();
+});
+
+/* ================= marketplace ================= */
+function renderMarket(){
+  $('#mktGrid').innerHTML=S.mkt.map(m=>`
+    <div class="card mk">
+      <span class="mkimg" aria-hidden="true">${m.icon}</span>
+      <b style="font-size:14px">${m.name}</b>
+      <span style="color:var(--muted);font-size:12.5px">${fmt(m.cost)} pts · ₹${m.cost/10} credit</span>
+      <button class="btn ${S.points>=m.cost?'primary':'ghost'}" data-redeem="${m.id}" style="justify-content:center;align-self:stretch">
+        ${S.points>=m.cost?'Redeem':'Need more points'}
+      </button>
+    </div>`).join('');
+}
+let pending=null;
+document.addEventListener('click',e=>{
+  const rb=e.target.closest('[data-redeem]');
+  if(!rb)return;
+  const m=S.mkt.find(x=>x.id===rb.dataset.redeem);
+  if(S.points<m.cost){toast(`Not enough points yet — you need ${fmt(m.cost-S.points)} more.`,'⚠');return;}
+  pending=m;
+  $('#rdIcon').textContent=m.icon;$('#rdName').textContent=m.name;
+  $('#rdCost').textContent=`${fmt(m.cost)} points · ₹${m.cost/10} voucher`;
+  $('#rdBalNow').textContent=fmt(S.points);
+  $('#rdDeduct').textContent='−'+fmt(m.cost);
+  $('#rdBalAfter').textContent=fmt(S.points-m.cost);
+  $('#mredeem').hidden=false;
+});
+$('#rdGo').addEventListener('click',()=>{
+  const m=pending;if(!m)return;
+  debit(m.cost,'Redeemed · '+m.name);
+  const code='APPL-'+Math.random().toString(36).slice(2,6).toUpperCase()+'-'+Math.floor(10+Math.random()*90);
+  $('#mredeem').hidden=true;
+  $('#dnTxt').textContent=m.name+' · code arrives in email & wallet history.';
+  $('#dnCode').textContent=code;
+  $('#mdone').hidden=false;
+  renderMarket();
+});
+
+/* ================= notifications & guide ================= */
+function renderNotifs(){
+  $('#notifList').innerHTML=(S.notifs[S.role]||[]).map(n=>`
+    <div class="nitem"><b>${n.b}</b><p>${n.p}</p><small style="color:var(--faint)">${n.t}</small></div>`).join('')
+    || '<div class="nitem"><p>Nothing yet — give a kudos and watch this space.</p></div>';
+}
+function pushNotif(to,b,p){if(S.notifs[to])S.notifs[to].unshift({b,p,t:'now'});S.unread[to]=(S.unread[to]||0)+1;if(to===S.role)syncRole();}
+function renderGuide(){
+  const steps=[
+    ['Switch persona — 7 roles','Employee, Peer, L1/L2/L3, Quota & Budget, Admin/HR — Shan, Prastina, Prateesh and the interns in one menu.','pmenu'],
+    ['Open the praise feed','Syed recognizes Nikhilesh in seconds — kudos always free.','feed'],
+    ['Send kudos (live modal)','The AI agent checks specificity & tone while you type; attach up to a 100-pt peer reward.','kudos'],
+    ['Company tree sync','The tree knows the interns report to Prateesh — routing needs no manual work.','tree'],
+    ['Manager dashboard','Prateesh reinforces with points against the L1 quota pool; each pool follows the registry.','manager'],
+    ['Nominate for EoQ','AI validates eligibility, evidence, duplicates, policy — then drafts a summary.','nominate'],
+    ['Approve & endorse','Approval walks the tree — Prateesh (if intern-nominated), Prastina, Shan, awards office.','approval'],
+    ['Award rules — the registry','Flip the quota carrier of any award; every flow follows live.','rules'],
+    ['Jury & winner','The committee sees every file and votes. The winner’s 5,000 pts deduct from the carrier pool.','jury'],
+    ['Wallet','A ledger of every point in and out.','wallet'],
+    ['Marketplace','Points become vouchers at 10 points = ₹1.','market'],
+  ];
+  $('#guideList').innerHTML=steps.map((s,i)=>`
+    <div class="panelli">
+      <div style="display:flex;align-items:center;gap:10px">
+        <b style="flex:1">${i+1}. ${s[0]}</b>
+        <button class="btn sm ${i===99?'primary':'subtle'}" data-goto="${s[2]}">Open</button>
+      </div>
+      <p>${s[1]}</p>
+    </div>`).join('');
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-goto]');
+  if(g){
+    const w=g.dataset.goto;
+    $$('.drawer').forEach(d=>d.hidden=true);
+    if(w==='kudos')openKudos(); else if(w==='pmenu'){renderPersonaMenu();$('#pmenu').hidden=false;}
+    else openView(w);
+    if(w==='nominate'){prefillNom();}
+    if(w==='approval')renderApproval();
+  }
+});
+
+/* ================= award rules (Admin/HR) ================= */
+function renderRules(){
+  $('#rulesBody').innerHTML=AWARDS.map(a=>{
+    const pool=a.carrier?poolForCarrier(a.carrier):null;
+    return `
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:9px"><span aria-hidden="true">${a.icon}</span><div><b>${a.name}</b><div style="font-size:12px;color:var(--muted)">${a.p}</div></div></div></td>
+      <td style="font-size:13px">${a.given}</td>
+      <td style="font-size:12px">${a.route.map(s=>`<span class="chip gray" style="margin:2px 4px 2px 0">${s}</span>`).join('')}</td>
+      <td>${a.carrier?`
+        <select data-carrier="${a.id}" style="border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:12.5px;background:#fff">
+          ${['Prateesh','Prastina','Shan','OFFICE'].map(k=>`
+            <option value="${k}" ${a.carrier===k?'selected':''}>${ROLES[k].name} · ${({Prateesh:'L1',Prastina:'L2',Shan:'L3',OFFICE:'Admin/HR'})[k]}</option>`).join('')}
+        </select>`:'<span class="chip gray">none — free</span>'}
+      </td>
+      <td style="text-align:right">${pool?`<b class="num">${fmt(pool.total-pool.used)}</b> <span style="color:var(--faint);font-size:12px">/ ${fmt(pool.total)}</span>`:'—'}</td>
+    </tr>`;
+  }).join('');
+}
+document.addEventListener('change',e=>{
+  const sel=e.target.closest('[data-carrier]');
+  if(!sel)return;
+  const a=AWARDS.find(x=>x.id===sel.dataset.carrier);
+  const from=a.carrier;a.carrier=sel.value;
+  renderRules();
+  if(['Prateesh','Prastina','Shan','OFFICE'].includes(S.role))renderManager();
+  toast(`<b>${a.name}</b>: quota carrier changed <b>${ROLES[from].name} → ${ROLES[a.carrier].name}</b>. Give & approval flows re-read the rule instantly.`,'⚖️');
+});
+
+/* ================= persona switching & init ================= */
+function renderPersonaMenu(){
+  $('#pmenuList').innerHTML=PERSONAS.map(p=>{
+    const r=ROLES[p.roleKey];
+    const active=S.persona===p.pid;
+    return `<div class="panelli" style="display:flex;align-items:center;gap:10px">
+      <span class="avatar ${r.cls}">${r.init}</span>
+      <div style="flex:1;min-width:0">
+        <b style="font-size:13.5px">${p.label}</b>
+        <p style="font-size:12px;color:var(--muted)">${r.name} · ${p.who}</p>
+      </div>
+      <button class="btn sm ${active?'subtle':'ghost'}" data-persona="${p.pid}" ${active?'disabled':''}>${active?'viewing':'switch'}</button>
+    </div>`;
+  }).join('');
+}
+function switchPersona(pid){
+  const p=PERSONAS.find(x=>x.pid===pid);if(!p)return;
+  S.persona=pid;S.role=p.roleKey;
+  syncRole();renderPersonaMenu();
+  const home=p.pid==='admin'||p.pid==='qb'?'rules':isManagerGloss(p.pid)?'manager':'feed';
+  openView(home);
+  if(home==='manager')renderManager();
+  if(home==='rules')renderRules();
+  toast(`Now acting as <b>${p.label}</b> — ${ROLES[p.roleKey].name}.`,'👤');
+}
+function isManagerGloss(pid){return ['l1','l2','l3'].includes(pid);}
+document.addEventListener('click',e=>{
+  const sel=e.target.closest('[data-persona]');
+  if(sel){switchPersona(sel.dataset.persona);$('#pmenu').hidden=true;}
+});
+$('#roleBtn').addEventListener('click',()=>{renderPersonaMenu();$('#pmenu').hidden=false;});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')$$('.ovl,.drawer').forEach(o=>o.hidden=true);
+});
+/* first paint */
+syncWallet();syncRole();renderFeed();renderManager();renderAwards();renderJury();renderMarket();renderNotifs();openView('feed');
+setTimeout(()=>toast('Tip: click the avatar (top-right) to <b>switch between the 7 personas</b>.','🗺️'),700);
+</script>
+
+<!--@BODY@-->
+</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R&R Portal — Lo-fi Wireframes v1</title>
+<style>
+  :root{
+    --canvas:#F1F2F1;
+    --frame:#FFFFFF;
+    --edge:#D8DCD9;
+    --line:#E6E9E6;
+    --bar:#E4E7E4;
+    --txt:#4A5450;
+    --txt-dark:#2E3733;
+    --tap:#0E7A6F;
+    --note:#A87614;
+    --paper:#FFFBEF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--canvas);
+    color:var(--txt);
+    font:400 14px/1.5 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding:32px 28px 80px;
+  }
+  /* ---------- page header ---------- */
+  .head{max-width:1480px;margin:0 auto 10px}
+  .head h1{
+    font-size:20px;font-weight:700;color:var(--txt-dark);letter-spacing:-.01em;
+  }
+  .head p{margin-top:2px;font-size:13px;color:#6B7571}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:12.5px}
+  .legend span{display:flex;align-items:center;gap:7px;color:#5C6662}
+  .sw{display:inline-block;width:26px;height:10px;border-radius:99px;border:1.5px solid var(--edge)}
+  .sw.tap{border-color:var(--tap);background:#EAF4F2}
+  .sw.note{border:1.5px dashed var(--note);background:var(--paper)}
+  .sw.bar{background:var(--bar);border-color:var(--bar)}
+  /* ---------- flow map ---------- */
+  .flowmap{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    max-width:1480px;margin:26px auto 42px;
+  }
+  .fstep{
+    display:flex;align-items:center;gap:8px;
+    background:var(--frame);border:1px solid var(--edge);border-radius:10px;
+    padding:9px 11px;font-size:12.5px;color:var(--txt-dark);white-space:nowrap;
+  }
+  .fstep b{
+    font-size:11px;color:#fff;background:var(--tap);border-radius:99px;
+    min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;
+    padding:0 5px;font-weight:700;
+  }
+  .arr{color:#9AA39F;font-size:13px}
+  /* ---------- frames board ---------- */
+  .board{
+    max-width:1480px;margin:0 auto;display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(430px,1fr));
+    gap:56px 40px;align-items:start;
+  }
+  .fr{display:block}
+  .fr figcaption{
+    font-size:12.5px;font-weight:600;color:#55605B;margin-bottom:10px;
+  }
+  .fr figcaption em{font-style:normal;font-weight:400;color:#8A938E;margin-left:6px}
+  .win{
+    background:var(--frame);border:1px solid var(--edge);border-radius:12px;
+    min-height:300px;position:relative;overflow:hidden;
+  }
+  /* lo-fi atoms */
+  .bar{height:9px;border-radius:5px;background:var(--bar)}
+  .w20{width:20%}.w30{width:30%}.w40{width:40%}.w50{width:50%}
+  .w60{width:60%}.w70{width:70%}.w80{width:80%}.w100{width:100%}
+  .bars{display:grid;gap:7px;padding:0 12px}
+  .dot{width:24px;height:24px;border-radius:50%;background:var(--bar);flex:none}
+  .chip{
+    display:inline-block;font-size:10px;color:var(--txt);
+    border:1px solid var(--edge);border-radius:99px;padding:2px 8px;background:#F6F7F6;
+  }
+  .chip.tap{color:var(--tap);border-color:var(--tap)}
+  .btn{
+    display:inline-block;font-size:10.5px;font-weight:600;
+    border:1px solid var(--edge);border-radius:6px;padding:5px 10px;color:var(--txt);
+    background:#F6F7F6;
+  }
+  .btn.tap{background:var(--tap);border-color:var(--tap);color:#fff}
+  .btn.ghost{background:transparent}
+  .row{display:flex;align-items:center;gap:8px}
+  .pad{padding:12px}
+  /* fake chrome */
+  .topbar{
+    display:flex;align-items:center;gap:8px;padding:10px 12px;
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    width:22px;height:22px;border-radius:6px;background:var(--tap);opacity:.35;flex:none;
+  }
+  .search{flex:1;height:22px;border:1px solid var(--edge);border-radius:6px;background:#FAFBFA}
+  .side{
+    width:118px;flex:none;border-right:1px solid var(--line);
+    padding:12px 10px;display:grid;gap:8px;align-content:start;
+    min-height:260px;
+  }
+  .navitem{height:20px;border-radius:5px;background:var(--bar)}
+  .navitem.tap{background:#EAF4F2;border:1px solid var(--tap)}
+  .split{display:flex}
+  .grow{flex:1;min-width:0}
+  /* cards */
+  .card{
+    border:1px solid var(--line);border-radius:8px;padding:10px;background:#FCFDFC;
+  }
+  /* notes */
+  .note{
+    border:1.5px dashed var(--note);background:var(--paper);border-radius:8px;
+    padding:8px 10px;font-size:11.5px;color:#6E5417;line-height:1.45;
+  }
+  .note b{color:#5B440C}
+  .fr .note{margin-top:10px}
+  .win > .note{position:absolute}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>R&amp;R Portal — Lo-fi wireframes · v1</h1>
+  <p>Structure pass before visual design. One employee example runs through every frame:
+     Syed praises Shourya for fixing a production API issue before a client demo,
+     Prateesh (the interns' manager) reinforces it, the contribution is nominated for the Q3
+     Excellence Award, approvals climb Prastina → Shan, the jury votes, and the reward ends in Shourya's wallet.</p>
+  <div class="legend">
+    <span><i class="sw bar"></i> placeholder text</span>
+    <span><i class="sw tap"></i> tappable / primary element</span>
+    <span><i class="sw note"></i> design note</span>
+    <span><i class="sw"></i> secondary UI</span>
+  </div>
+</div>
+
+<div class="flowmap">
+  <span class="fstep"><b>1</b> Feed</span><span class="arr">→</span>
+  <span class="fstep"><b>2</b> Give kudos</span><span class="arr">→</span>
+  <span class="fstep"><b>3</b> AI validation</span><span class="arr">→</span>
+  <span class="fstep"><b>4</b> Org tree sync</span><span class="arr">→</span>
+  <span class="fstep"><b>5</b> Notifications</span><span class="arr">→</span>
+  <span class="fstep"><b>6</b> Manager dashboard</span><span class="arr">→</span>
+  <span class="fstep"><b>7</b> Nomination form</span><span class="arr">→</span>
+  <span class="fstep"><b>8</b> Approval routing</span><span class="arr">→</span>
+  <span class="fstep"><b>9</b> Jury voting</span><span class="arr">→</span>
+  <span class="fstep"><b>10</b> Winner</span><span class="arr">→</span>
+  <span class="fstep"><b>11</b> Wallet</span><span class="arr">→</span>
+  <span class="fstep"><b>12</b> Marketplace</span>
+</div>
+
+<div class="board">
+
+  <figure class="fr">
+    <figcaption>F1 · Home feed <em>steps 1–2</em></figcaption>
+    <div class="win">
+      <div class="topbar">
+        <i class="logo"></i>
+        <div class="search"></div>
+        <i class="dot" style="width:16px;height:16px;border-radius:5px"></i>
+        <i class="dot" style="width:16px;height:16px"></i>
+      </div>
+      <div class="split">
+        <div class="side">
+          <div class="navitem tap" style="width:70%"></div>
+          <div class="navitem w80"></div>
+          <div class="navitem w60"></div>
+          <div class="navitem w70"></div>
+          <div class="navitem w50"></div>
+        </div>
+        <div class="grow pad" style="display:grid;gap:10px">
+          <div class="row">
+            <i class="dot"></i>
+            <div class="card grow" style="padding:8px 10px">
+              <span class="btn tap">+ Congratz / Praise</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row" style="margin-bottom:8px">
+              <i class="dot" style="width:18px;height:18px"></i>
+              <span class="bar w40"></span>
+              <span class="chip">Collaboration</span>
+            </div>
+            <div class="bars" style="padding:0">
+              <span class="bar w80"></span>
+              <span class="bar w60"></span>
+            </div>
+            <div class="row" style="margin-top:9px;gap:12px">
+              <span class="chip tap">♥ 12</span>
+              <span class="chip">3 comments</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row" style="margin-bottom:8px">
+              <i class="dot" style="width:18px;height:18px"></i>
+              <span class="bar w50"></span>
+              <span class="chip">Customer impact</span>
+              <span class="chip" style="border-color:var(--note);color:var(--note)">+100 pts</span>
+            </div>
+            <div class="bars" style="padding:0"><span class="bar w70"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>Rule:</b> every kudos is free to give. Points are optional and separate — the feed never implies reward.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F2 · Give kudos — modal <em>step 1</em></figcaption>
+    <div class="win" style="min-height:340px">
+      <div class="pad" style="background:var(--frame);height:100%;position:relative">
+        <div style="position:absolute;inset:0;background:#EDEFED;opacity:.55"></div>
+        <div class="card" style="position:absolute;inset:24px;background:#fff;box-shadow:0 8px 22px rgba(0,0,0,.08)">
+          <div class="row" style="justify-content:space-between;margin-bottom:10px">
+            <span class="bar w30"></span><span class="chip">✕</span>
+          </div>
+          <div class="bars" style="padding:0;margin-bottom:5px"><span class="bar w20" style="height:7px"></span></div>
+          <div style="height:24px;border:1px solid var(--edge);border-radius:6px;display:flex;align-items:center;padding:0 8px;margin-bottom:6px"><span class="bar w40"></span></div>
+          <div class="row" style="margin-bottom:6px">
+            <span class="chip tap">Shourya</span><span class="chip">Search other people…</span>
+          </div>
+          <div class="bars" style="padding:0;margin-bottom:8px;margin-top:10px"><span class="bar w25" style="height:7px"></span></div>
+          <div class="row" style="flex-wrap:wrap">
+            <span class="chip tap">Collaboration</span>
+            <span class="chip">Innovation</span>
+            <span class="chip">Delivery</span>
+            <span class="chip">Customer impact</span>
+          </div>
+          <div style="height:56px;border:1px solid var(--edge);border-radius:6px;margin-top:10px;padding:8px">
+            <div class="bars"><span class="bar w70"></span><span class="bar w40"></span></div>
+          </div>
+          <div class="row" style="justify-content:space-between;margin-top:10px">
+            <span class="chip" style="border-color:var(--tap);color:var(--tap)">Attach a reward +</span>
+            <span class="btn tap">Send recognition</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F3 · AI validation states <em>step 4 — AI agent</em></figcaption>
+    <div class="win" style="min-height:340px">
+      <div class="pad" style="display:grid;gap:12px">
+        <div class="card">
+          <div class="row" style="margin-bottom:7px"><span class="bar w30"></span><span class="chip">typed: “Shourya is good.”</span></div>
+          <div class="note" style="margin:0">
+            <b>AI:</b> recognition could be more specific — what did Shourya do, and what impact did it create? Suggest: “helped resolve …”
+          </div>
+        </div>
+        <div class="card">
+          <div class="bars" style="padding:0;margin-bottom:9px"><span class="bar w60"></span><span class="bar w40"></span></div>
+          <div style="display:grid;gap:5px;font-size:10.5px;color:var(--txt)">
+            <div class="row"><span style="color:var(--tap)">✓</span><span class="bar w50"></span></div>
+            <div class="row"><span style="color:var(--tap)">✓</span><span class="bar w40"></span></div>
+            <div class="row"><span style="color:var(--tap)">✓</span><span class="bar w60"></span></div>
+            <div class="row"><span style="color:var(--tap)">✓</span><span class="bar w35"></span></div>
+          </div>
+          <div class="row" style="margin-top:10px;justify-content:space-between">
+            <span class="chip tap">valid employee · language · specificity</span>
+            <span class="btn tap">Ready to submit</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>AI agent:</b> the agent validates and moves the workflow forward — it is not a chatbot in the corner.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F4 · Company tree sync <em>step 3</em></figcaption>
+    <div class="win">
+      <div class="pad" style="display:grid;place-items:center;position:relative;height:100%">
+        <div style="position:relative;width:280px;height:190px">
+          <span style="position:absolute;left:106px;top:0" class="card">Prateesh · Manager</span>
+          <span style="position:absolute;left:64px;top:100px" class="card">Shourya</span>
+          <span style="position:absolute;left:170px;top:100px" class="card">Syed</span>
+          <span style="position:absolute;left:127px;top:34px;height:26px;width:1.5px;background:var(--edge)"></span>
+          <span style="position:absolute;left:89px;top:60px;height:40px;width:1.5px;background:var(--edge)"></span>
+          <span style="position:absolute;left:195px;top:60px;height:40px;width:1.5px;background:var(--edge)"></span>
+          <span style="position:absolute;left:89px;top:99px;width:106px;height:1.5px;background:var(--edge)"></span>
+        </div>
+        <span class="chip tap" style="margin-top:6px">Synced from HR directory · daily</span>
+      </div>
+    </div>
+    <div class="note"><b>Effect:</b> the portal resolves Shourya's manager automatically — nobody manually routes recognition to Prateesh; award approvals climb Prastina → Shan.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F5 · Notifications — manager view <em>step 5</em></figcaption>
+    <div class="win">
+      <div class="topbar">
+        <div class="search"></div>
+        <span class="chip tap" style="position:relative">bell <i style="position:absolute;top:-6px;right:-6px;background:var(--tap);color:#fff;font-size:8px;border-radius:99px;padding:1px 4px">2</i></span>
+        <i class="dot" style="width:16px;height:16px"></i>
+      </div>
+      <div class="pad" style="display:grid;gap:9px">
+        <div class="card" style="border-color:var(--tap)">
+          <div class="row" style="margin-bottom:6px">
+            <i class="dot" style="width:18px;height:18px"></i>
+            <span class="bar w60"></span>
+          </div>
+          <div class="bars" style="padding:0"><span class="bar w80"></span></div>
+          <div class="row" style="margin-top:8px;gap:6px">
+            <span class="btn ghost">Appreciate</span>
+            <span class="btn ghost">Comment</span>
+            <span class="btn tap">+ Add points</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="row"><i class="dot" style="width:18px;height:18px"></i><span class="bar w50"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>Trigger:</b> Syed submits → system looks up Shourya's manager in the tree → Prateesh is notified the moment he logs in.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F6 · Manager dashboard + budget <em>step 6</em></figcaption>
+    <div class="win" style="min-height:360px">
+      <div class="split">
+        <div class="side">
+          <div class="navitem w80"></div>
+          <div class="navitem tap" style="width:70%"></div>
+          <div class="navitem w60"></div>
+        </div>
+        <div class="grow pad" style="display:grid;gap:10px">
+          <div class="row" style="gap:10px">
+            <span class="chip tap">Team: 2 members</span>
+            <span class="chip">Q3 · Oct 2026</span>
+          </div>
+          <div class="card">
+            <div class="row" style="justify-content:space-between;margin-bottom:7px">
+              <span class="bar w40"></span><span class="chip">Monthly reward budget</span>
+            </div>
+            <div style="height:10px;border-radius:99px;background:var(--bar);overflow:hidden">
+              <div style="width:65%;height:100%;background:var(--tap);opacity:.5"></div>
+            </div>
+            <div class="row" style="justify-content:space-between;font-size:9.5px;color:#8A938E;margin-top:5px">
+              <span class="bar" style="width:15%"></span>
+              <span class="bar" style="width:15%"></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row" style="margin-bottom:6px">
+              <i class="dot" style="width:18px;height:18px"></i>
+              <span class="bar w50"></span><span class="chip tap">+100 pts</span>
+            </div>
+            <div class="bars" style="padding:0"><span class="bar w70"></span></div>
+            <div class="row" style="margin-top:8px;gap:6px">
+              <span class="btn ghost">Appreciate</span>
+              <span class="btn tap">+500 pts</span>
+              <span class="btn tap" style="border-style:dashed">Nominate for EoQ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>Guardrail:</b> giving 5,000 with only 3,500 remaining → “Budget limit exceeded” + two offers: reduce reward, or request more budget.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F7 · EoQ nomination form <em>step 7 — award</em></figcaption>
+    <div class="win" style="min-height:360px">
+      <div class="pad" style="display:grid;gap:9px">
+        <div class="row" style="gap:8px"><span class="bar w30"></span><span class="chip tap">Q3 Excellence Award</span></div>
+        <div class="row" style="gap:8px">
+          <span class="chip">Candidate</span>
+          <span class="chip tap">Nikhilesh — auto-filled</span>
+        </div>
+        <div style="height:64px;border:1px solid var(--edge);border-radius:6px;padding:8px">
+          <div class="bars"><span class="bar w90"></span><span class="bar w70"></span><span class="bar w50"></span></div>
+        </div>
+        <div class="row">
+          <span class="btn ghost">Run AI review</span>
+        </div>
+        <div class="card">
+          <div style="display:grid;gap:5px;font-size:10px">
+            <div class="row"><span style="color:var(--tap)">✓</span><span class="bar w40"></span></div>
+            <div class="row"><span style="color:var(--tap)">✓</span><span class="bar w55"></span></div>
+            <div class="row"><span style="color:var(--tap)">✓</span><span class="bar w45"></span></div>
+            <div class="row"><span style="color:var(--tap)">✓</span><span class="bar w60"></span></div>
+          </div>
+        </div>
+        <div class="note" style="margin:0">
+          <b>AI summary:</b> 18 recognitions this quarter, 6 manager, 3 teams — drafted from history for the jury. AI never picks the winner.
+        </div>
+        <div class="row" style="justify-content:end"><span class="btn tap">Submit nomination</span></div>
+      </div>
+    </div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F8 · Approval routing + endorsement <em>steps 9–10</em></figcaption>
+    <div class="win" style="min-height:360px">
+      <div class="pad" style="display:grid;gap:10px">
+        <div class="row"><span class="bar w40"></span><span class="chip tap">Q3 · Excellence</span></div>
+        <div style="display:grid;gap:0;position:relative;padding-left:16px">
+          <span style="position:absolute;left:5px;top:8px;bottom:8px;width:1.5px;background:var(--edge)"></span>
+          <div class="row" style="margin-bottom:12px"><span style="color:var(--tap);margin-right:6px">●</span><span class="bar w50"></span><span class="chip">approved</span></div>
+          <div class="row" style="margin-bottom:12px"><span style="color:var(--tap);margin-right:6px">●</span><span class="bar w40"></span><span class="chip tap">pending — Prateesh</span></div>
+          <div class="row" style="margin-bottom:12px"><span style="color:#B9C1BD;margin-right:6px">●</span><span class="bar w60"></span><span class="chip">waiting</span></div>
+          <div class="row"><span style="color:#B9C1BD;margin-right:6px">●</span><span class="bar w45"></span><span class="chip">HR committee</span></div>
+        </div>
+        <div class="card">
+          <div class="row" style="justify-content:space-between">
+            <div class="row">
+              <span class="chip tap">Nominated by Prateesh</span>
+              <span class="chip">+6 peers endorsed</span>
+            </div>
+            <span class="btn ghost">Endorse</span>
+          </div>
+        </div>
+        <div class="row" style="gap:6px;justify-content:end">
+          <span class="btn ghost">Reject</span>
+          <span class="btn ghost">Request changes</span>
+          <span class="btn tap">Approve</span>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>Routing:</b> approval chain is derived from the company tree — when an intern nominates, Prateesh approves first, then Prastina, then Shan / awards committee.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F9 · Jury dashboard <em>step 11</em></figcaption>
+    <div class="win" style="min-height:360px">
+      <div class="pad">
+        <div class="row" style="justify-content:space-between;margin-bottom:9px">
+          <span class="bar w30"></span>
+          <span class="chip tap">Submissions closed</span>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table style="width:100%;border-collapse:collapse;font-size:10px;color:var(--txt)">
+            <tr style="border-bottom:1px solid var(--line);text-align:left">
+              <td style="padding:7px 9px"><b>Candidate</b></td>
+              <td>Recognitions</td><td>Impact</td><td>AI</td><td></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:8px 9px"><div class="row"><i class="dot" style="width:14px;height:14px"></i><span class="bar w60" style="flex:1"></span></div></td>
+              <td><b>18</b></td><td>★★★★★</td><td style="color:var(--tap)">✓</td>
+              <td style="padding-right:9px"><span class="btn tap">Vote</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--line)">
+              <td style="padding:8px 9px"><div class="row"><i class="dot" style="width:14px;height:14px"></i><span class="bar w40" style="flex:1"></span></div></td>
+              <td><b>14</b></td><td>★★★★</td><td style="color:var(--tap)">✓</td>
+              <td style="padding-right:9px"><span class="btn ghost">Vote</span></td>
+            </tr>
+            <tr>
+              <td style="padding:8px 9px"><div class="row"><i class="dot" style="width:14px;height:14px"></i><span class="bar w70" style="flex:1"></span></div></td>
+              <td><b>11</b></td><td>★★★★</td><td style="color:var(--tap)">✓</td>
+              <td style="padding-right:9px"><span class="btn ghost">Vote</span></td>
+            </tr>
+          </table>
+        </div>
+        <div class="bars" style="padding:0;margin-top:10px">
+          <span class="bar w80"></span><span class="bar w60"></span>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>Jury sees all:</b> nomination, recognition history, manager + peer endorsements, AI summary — executives still vote themselves.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F10 · Winner moment <em>step 12</em></figcaption>
+    <div class="win">
+      <div class="pad" style="display:grid;place-items:center;text-align:center;height:100%;position:relative">
+        <div>
+          <div class="row" style="justify-content:center;gap:6px;margin-bottom:10px">
+            <span class="chip">✦</span><span class="chip">✦</span><span class="chip">✦</span>
+          </div>
+          <div class="bars" style="padding:0;max-width:240px;margin:0 auto">
+            <span class="bar w60" style="height:14px"></span>
+            <span class="bar w40"></span>
+            <span class="bar w30"></span>
+          </div>
+          <span class="chip tap" style="margin-top:12px">+5,000 points posted to wallet</span>
+          <div class="row" style="justify-content:center;margin-top:12px">
+            <span class="btn tap">Open wallet</span>
+            <span class="btn ghost">Share to feed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>Auto-post:</b> win announcement lands in the feed, points land in the wallet ledger, Prateesh gets the awards email.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F11 · Wallet — the ledger <em>step 13</em></figcaption>
+    <div class="win" style="min-height:360px">
+      <div class="split">
+        <div class="side">
+          <div class="navitem w60"></div>
+          <div class="navitem tap" style="width:50%"></div>
+          <div class="navitem w70"></div>
+        </div>
+        <div class="grow pad" style="display:grid;gap:10px">
+          <div class="card">
+            <div class="bars" style="padding:0;margin-bottom:6px"><span class="bar w30" style="height:16px"></span></div>
+            <div class="row" style="gap:6px">
+              <span class="chip tap">+8,200 earned</span>
+              <span class="chip">−1,750 redeemed</span>
+            </div>
+          </div>
+          <div class="card" style="padding:0">
+            <table style="width:100%;border-collapse:collapse;font-size:10px;color:var(--txt)">
+              <tr><td style="padding:7px 9px;color:#8A938E">+100</td><td><span class="bar w50"></span></td></tr>
+              <tr style="border-top:1px solid var(--line)"><td style="padding:7px 9px;color:#8A938E">+500</td><td><span class="bar w40"></span></td></tr>
+              <tr style="border-top:1px solid var(--line)"><td style="padding:7px 9px;color:#8A938E">+5,000</td><td><span class="bar w60"></span></td></tr>
+              <tr style="border-top:1px solid var(--line)"><td style="padding:7px 9px;color:#8A938E">−1,750</td><td><span class="bar w45"></span></td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="note"><b>Ledger:</b> every point in and out is recorded — kudos points, manager boosts, awards, redemptions.</div>
+  </figure>
+
+  <figure class="fr">
+    <figcaption>F12 · Marketplace + redeem <em>step 14</em></figcaption>
+    <div class="win" style="min-height:360px">
+      <div class="split">
+        <div class="side">
+          <div class="navitem w50"></div>
+          <div class="navitem tap" style="width:65%"></div>
+          <div class="navitem w70"></div>
+        </div>
+        <div class="grow pad" style="display:grid;gap:10px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+            <div class="card">
+              <div class="bars" style="padding:0;margin-bottom:6px">
+                <span class="bar w60" style="height:22px"></span><span class="bar w40"></span>
+              </div>
+              <div class="row" style="justify-content:space-between;margin-top:7px">
+                <span class="chip tap">1,000 pts</span><span class="btn tap">Redeem</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="bars" style="padding:0;margin-bottom:6px">
+                <span class="bar w50" style="height:22px"></span><span class="bar w60"></span>
+              </div>
+              <div class="row" style="justify-content:space-between;margin-top:7px">
+                <span class="chip tap">4,000 pts</span><span class="btn ghost">Redeem</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="bars" style="padding:0;margin-bottom:6px">
+                <span class="bar w70" style="height:22px"></span><span class="bar w30"></span>
+              </div>
+              <div class="row" style="justify-content:space-between;margin-top:7px">
+                <span class="chip tap">600 pts</span><span class="btn ghost">Redeem</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="bars" style="padding:0;margin-bottom:6px">
+                <span class="bar w40" style="height:22px"></span><span class="bar w55"></span>
+              </div>
+              <div class="row" style="justify-content:space-between;margin-top:7px">
+                <span class="chip tap">250 pts</span><span class="btn ghost">Redeem</span>
+              </div>
+            </div>
+          </div>
+          <div class="note" style="margin:0">
+            <b>Confirm step:</b> “Deduct 1,000 of 6,450? → 5,450 will remain.” If short: “Not enough points — you have 4,650. Pick a smaller reward or keep earning.”
+          </div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+</div>
+
+</body>
+</html>

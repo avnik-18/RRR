@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team structure &amp; recognition flows — real example</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:#F7F8F7;color:#22312C;
+    font:400 14.5px/1.55 -apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding:34px 20px 70px;
+  }
+  .wrap{max-width:900px;margin:0 auto}
+  h1{font-size:21px;letter-spacing:-.01em}
+  .sub{color:#667871;margin-top:4px;font-size:13.5px}
+  .box{background:#fff;border:1px solid #E3E8E5;border-radius:10px}
+  h2{font-size:15px;margin-bottom:12px}
+  section{margin-top:26px}
+  .pad{padding:16px}
+
+  /* ---- tree ---- */
+  .tree{padding:22px 14px 26px}
+  .lvl{display:grid;justify-items:center}
+  .node{
+    display:flex;align-items:center;gap:10px;
+    border:1px solid #E3E8E5;background:#FCFDFC;border-radius:9px;
+    padding:9px 14px;
+  }
+  .node.head{border-color:#0C7A6C;background:#F0F7F5}
+  .node.mgr{border-color:#8FBFB6}
+  .av{
+    width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+    font-weight:700;font-size:12.5px;color:#fff;flex:none;
+  }
+  .av.dark{background:#0C7A6C}
+  .av.brown{background:#B98A1C}
+  .av.gray{background:#8AA09A}
+  .node b{font-size:13.5px}
+  .node small{display:block;color:#667871;font-size:11.5px;line-height:1.2}
+  .v{width:2px;height:20px;background:#D8DEDA}
+  .h{height:2px;background:#D8DEDA;width:auto}
+  .connect{display:flex;justify-content:center;width:100%}
+  .hline{height:2px;background:#D8DEDA;width:calc(100% - 260px)}
+  .vcap{width:2px;height:14px;background:#D8DEDA}
+  .interns{
+    display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:720px;
+  }
+  .intern{padding:8px 12px}
+
+  /* ---- flows ---- */
+  .flow{padding:16px}
+  .flow h3{font-size:13.5px;margin-bottom:2px}
+  .flow .tag{display:inline-block;font-size:11px;font-weight:600;border-radius:99px;padding:3px 9px;background:#EAF3F1;color:#0C7A6C;margin-bottom:10px}
+  .steps{display:grid;gap:7px}
+  .step{display:flex;gap:9px;align-items:flex-start;font-size:13.5px}
+  .step i{font-style:normal;flex:none;width:19px;height:19px;border-radius:50%;background:#EAF3F1;color:#0C7A6C;font-size:10.5px;font-weight:700;display:grid;place-items:center;margin-top:1px}
+  .who{color:#667871;font-size:12.5px}
+  .note{background:#FBF7EC;border:1px dashed #E0D3AC;border-radius:9px;padding:10px 12px;font-size:12.5px;color:#7A6520;margin-top:12px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:760px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Team structure &amp; recognition flows</h1>
+  <p class="sub">Real org data, plain HTML. This is the reference the portal builds on: the tree decides who gets notified and who approves.</p>
+
+  <section>
+    <div class="box">
+      <h2 class="pad" style="padding-bottom:4px">Company tree — synced from the HR directory</h2>
+      <div class="tree">
+        <div class="lvl">
+          <div class="node head">
+            <span class="av dark">Sh</span>
+            <span><b>Shan</b><small>Higher title · org head</small></span>
+          </div>
+          <div class="v"></div>
+          <div class="node head">
+            <span class="av dark">Pr</span>
+            <span><b>Prastina</b><small>Higher title · senior manager</small></span>
+          </div>
+          <div class="v"></div>
+          <div class="node mgr">
+            <span class="av brown">Pr</span>
+            <span><b>Prateesh</b><small>Manager · budget owner for the team</small></span>
+          </div>
+          <div class="connect"><span class="vcap"></span></div>
+          <div class="connect"><div class="hline"></div></div>
+          <div class="connect"><span class="vcap"></span></div>
+          <div class="interns">
+            <div class="node intern"><span class="av gray">N</span><span><b>Nikhilesh</b><small>Intern</small></span></div>
+            <div class="node intern"><span class="av gray">S</span><span><b>Syed</b><small>Intern</small></span></div>
+            <div class="node intern"><span class="av gray">S</span><span><b>Shourya</b><small>Intern</small></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:10px">
+      What the tree decides: every intern's <b>manager of record is Prateesh</b>. Peer kudos to any intern notifies
+      <b>Prateesh</b>, a manager boost spends <b>Prateesh's monthly budget</b>, and an EoQ nomination starts its
+      approval at <b>Prastina</b> (when the manager nominates) or <b>Prateesh</b> (when an intern nominates) —
+      then <b>Shan</b> before the jury. Joins, exits and title changes re-route all of this automatically the next morning.
+    </p>
+  </section>
+
+  <section>
+    <h2>Real example flows</h2>
+    <div class="grid">
+
+      <div class="box">
+        <div class="flow">
+          <span class="tag">Flow A · free kudos</span>
+          <h3>Syed recognizes Shourya</h3>
+          <div class="steps">
+            <div class="step"><i>1</i><span>Syed opens the portal, taps <b>Give kudos</b>, picks <b>Shourya</b>, writes: “Rebuilt the test cases the night before the module demo.”</span></div>
+            <div class="step"><i>2</i><span>AI agent check: names a real contribution, clean tone, recipient exists in the directory.</span></div>
+            <div class="step"><i>3</i><span>Posted to the feed — <b>no points, no cost</b>. Badge on Shourya's profile.</span></div>
+            <div class="step"><i>4</i><span>The tree resolves Shourya's manager → <b>Prateesh is notified</b> on his dashboard.</span></div>
+          </div>
+          <div class="note">Every kudos is free. Recognition and money are two different things by design.</div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="flow">
+          <span class="tag">Flow B · kudos with points</span>
+          <h3>Syed adds +50 to Shourya</h3>
+          <div class="steps">
+            <div class="step"><i>1</i><span>Same kudos flow, but Syed taps <b>Attach a reward</b> and picks <b>+50</b>.</span></div>
+            <div class="step"><i>2</i><span>Peer cap enforced by the system: max <b>100 points</b> per kudos.</span></div>
+            <div class="step"><i>3</i><span>Shourya's wallet ledger shows <b>+50</b> with the reason and date.</span></div>
+            <div class="step"><i>4</i><span>Prateesh sees it aggregated in the manager dashboard (+ points, category, trends).</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="flow">
+          <span class="tag">Flow C · manager boost</span>
+          <h3>Prateesh gives Nikhilesh +500</h3>
+          <div class="steps">
+            <div class="step"><i>1</i><span>Prateesh opens the manager dashboard and boosts Nikhilesh's withdrawn-pipeline fix with <b>+500</b>.</span></div>
+            <div class="step"><i>2</i><span>Budget guardrail: team wallet is <b>10,000/month</b>; 6,500 used → this lands fine at 7,000.</span></div>
+            <div class="step"><i>3</i><span>If he tried 5,000 → blocked: <b>“Budget limit exceeded — 3,500 remaining”</b>, with two buttons: reduce amount or <b>request more budget</b> (goes to Prastina).</span></div>
+            <div class="step"><i>4</i><span>Nikhilesh gets notification + ledger entry.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="flow">
+          <span class="tag">Flow D · Employee of the Quarter</span>
+          <h3>Prateesh nominates Nikhilesh</h3>
+          <div class="steps">
+            <div class="step"><i>1</i><span>Prateesh nominates <b>Nikhilesh</b> for Q3 Excellence — justification: rebuilt the failing test suite overnight, zero post-launch bugs.</span></div>
+            <div class="step"><i>2</i><span>AI review: eligibility ✓ evidence from recognition history ✓ no duplicate ✓ policy ✓ — and drafts an AI summary for the jury.</span></div>
+            <div class="step"><i>3</i><span>Approval chain from the tree: <b>Prastina</b> (senior manager) → <b>Shan</b> (org head) → HR/awards committee.</span></div>
+            <div class="step"><i>4</i><span>Peers can <b>endorse</b> the same nomination instead of duplicating it.</span></div>
+            <div class="step"><i>5</i><span>Jury sees all files and votes. Winner gets <b>+5,000 points</b> straight into the wallet → redeemed in the marketplace as vouchers.</span></div>
+          </div>
+          <div class="note">Variant: if an intern (say Syed) nominates instead, approval <b>starts at Prateesh</b>, then Prastina → Shan. The tree, not the person, decides the route.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>The 7 personas, mapped on the real tree</h2>
+    <div class="box">
+      <div class="flow">
+        <div class="steps">
+          <div class="step"><i>1</i><span><b>Employee</b> — Nikhilesh: receives awards, earns and spends points.</span></div>
+          <div class="step"><i>2</i><span><b>Peer Employee</b> — Syed (any other intern): peer kudos, attaches rewards up to the 100-pt cap.</span></div>
+          <div class="step"><i>3</i><span><b>Manager L1</b> — Prateesh: manager of three, <b>budget owner</b>; carries the <b>Manager boost</b> quota (10,000/mo).</span></div>
+          <div class="step"><i>4</i><span><b>Manager L2</b> — Prastina: senior-manager approvals; would carry a <b>Quarterly Excellence</b> quota.</span></div>
+          <div class="step"><i>5</i><span><b>Manager L3</b> — Shan: org head; would carry the <b>Annual Pride</b> quota.</span></div>
+          <div class="step"><i>6</i><span><b>Manager with Quota &amp; Budget</b> — <b>not one fixed person</b>: each award type names its own carrier (boost → Prateesh, quarterly → Prastina, annual → Shan, EoQ → the awards office). Admin/HR can change it in the Award rules screen.</span></div>
+          <div class="step"><i>7</i><span><b>Admin / HR</b> — the awards office: rules, buckets, ballot clearance, jury. No individual named here on purpose.</span></div>
+        </div>
+        <div class="note">Key rule: <b>the quota-carrying manager changes per award type</b> — the registry (Award rules) decides, not the org chart alone.</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

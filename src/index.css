@@ -3,6 +3,7 @@
 
 :root {
   --teal: #47A2B0;
+  --teal-ink: #2E7A84;
   --black: #0E0E0E;
   --warm: #F2F2F0;
   --line: #E4E4E2;
@@ -34,7 +35,7 @@ button { color: inherit; }
 .icon-button { width: 40px; height: 40px; border: 1px solid var(--line); background: transparent; border-radius: 12px; display: grid; place-items: center; cursor: pointer; }
 .notification { position: relative; }
 .badge { position: absolute; top: -4px; right: -3px; min-width: 17px; height: 17px; border-radius: 10px; background: var(--red); color: white; display: grid; place-items: center; font-size: 9px; font-weight: 700; border: 2px solid var(--warm); }
-.ai-button { height: 40px; padding: 0 16px; border: 0; border-radius: 20px; background: var(--teal); color: white; display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 12px; cursor: pointer; }
+.ai-button { height: 40px; padding: 0 16px; border: 0; border-radius: 20px; background: var(--teal); color: white; display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .persona-trigger { height: 44px; padding: 4px 8px 4px 4px; border: 1px solid var(--line); background: transparent; border-radius: 14px; display: flex; align-items: center; gap: 9px; cursor: pointer; }
 .persona-short { text-align: left; display: grid; min-width: 83px; }
 .persona-short strong { font-size: 11px; }
@@ -102,8 +103,6 @@ h1 em { color: var(--teal); font-style: normal; }
 .avatar-stack { display: flex; }
 .avatar-stack .avatar { margin-right: -8px; }
 .more { margin-left: 12px; font-size: 9px; display: flex; align-items: center; }
-.mini-progress { height: 4px; background: var(--line); border-radius: 5px; overflow: hidden; margin-top: 17px; }
-.mini-progress i { display: block; height: 100%; background: var(--teal); border-radius: inherit; }
 .kpi-card small { color: var(--muted); font-size: 8px; }
 .info-dot { border: 1px solid #aaa; width: 15px; height: 15px; border-radius: 50%; display: grid; place-items: center; font-size: 8px; }
 .wallet-link { border: 0; padding: 0; background: transparent; color: var(--teal); font-size: 9px; font-weight: 700; display: flex; align-items: center; gap: 6px; cursor: pointer; }
@@ -149,13 +148,24 @@ h1 em { color: var(--teal); font-style: normal; }
 .give-button { height: 44px; border: 0; padding: 0 18px; border-radius: 13px; background: var(--teal); color: white; font-size: 11px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px rgba(71,162,176,.22); }
 .employee-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; margin-bottom: 13px; }
 .employee-kpi { min-height: 130px; padding: 17px 19px; background: #fafaf8; border: 1px solid var(--line); border-radius: 16px; }
-.kpi-title { display: flex; justify-content: space-between; color: var(--muted); font-size: 10px; font-weight: 600; }
-.employee-kpi > strong { display: block; font: 600 32px/1 "Manrope"; margin-top: 17px; letter-spacing: -1.5px; }
-.employee-kpi > strong small { font-size: 11px; letter-spacing: 0; color: var(--muted); }
-.delta { font-size: 9px; margin: 8px 0 0; display: flex; align-items: center; gap: 6px; }
-.delta.teal { color: var(--teal); }.delta.blue { color: var(--blue); }.delta.red { color: var(--red); }
-.delta i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: block; }
-.employee-kpi .mini-progress { margin-top: 9px; height: 3px; }
+.kpi-title { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 10px; font-weight: 600; }
+.kpi-title > span { display: inline-flex; align-items: center; gap: 7px; }
+.kpi-value { display: flex; align-items: flex-start; gap: 9px; margin-top: 14px; }
+.kpi-value strong { font: 600 32px/1 "Manrope"; letter-spacing: -1.5px; }
+.kpi-value strong small { font-size: 11px; letter-spacing: 0; color: var(--muted); }
+.kpi-chip { display: inline-flex; align-items: center; gap: 3px; margin-top: 3px; padding: 3px 7px; border-radius: 8px; font-size: 9px; font-weight: 700; line-height: 1; }
+.kpi-chip i { font-style: normal; font-size: 8px; }
+.kpi-chip.up { background: color-mix(in srgb, var(--teal) 16%, white); color: var(--teal-ink); }
+.kpi-chip.down { background: rgba(224,79,79,.13); color: var(--red); }
+.kpi-delta { font-size: 9px; margin: 8px 0 0; display: flex; align-items: center; gap: 5px; color: var(--muted); }
+.kpi-delta strong { display: inline-flex; align-items: center; gap: 2px; font: 700 9px "DM Sans"; white-space: nowrap; }
+.kpi-delta span { white-space: nowrap; }
+.kpi-delta .up { color: var(--teal-ink); }.kpi-delta .down { color: var(--red); }
+.monthly-bar { position: relative; display: flex; overflow: hidden; height: 8px; border-radius: 6px; background: var(--line); margin-top: 11px; gap: 2px; }
+.monthly-bar i { display: block; height: 100%; }
+.monthly-bar .curr { background: color-mix(in srgb, var(--teal) 30%, white); }
+.monthly-bar .prev { background: var(--teal); }
+.monthly-bar.over::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 3px; background: var(--warm); box-shadow: 0 0 0 1px rgba(14,14,14,.18); }
 .balance-buddies { display: grid; grid-template-columns: 2fr 3fr; gap: 13px; margin-bottom: 13px; }
 .balance-card, .buddies-card, .rewards-progress-card, .upcoming { border: 1px solid var(--line); border-radius: 16px; background: #fafaf8; }
 .balance-card { min-height: 170px; background: var(--black); color: white; padding: 23px; position: relative; overflow: hidden; transition: box-shadow .2s; }

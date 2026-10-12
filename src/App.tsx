@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 
 type IconName =
   | "home"
+  | "feed"
   | "spark"
   | "award"
   | "jury"
@@ -17,6 +18,7 @@ type IconName =
 
 const iconPaths: Record<IconName, ReactNode> = {
   home: <><path d="M3 10.8 12 3l9 7.8"/><path d="M5.5 9.5V21h13V9.5M9.5 21v-6h5v6"/></>,
+  feed: <><path d="M4 6h16M4 11h16M4 16h10"/></>,
   spark: <><path d="m12 2 1.5 5.2L19 9l-5.5 1.8L12 16l-1.5-5.2L5 9l5.5-1.8L12 2Z"/><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></>,
   award: <><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1 8 4.5-2 4.5 2-1-8"/></>,
   jury: <><path d="M4 20h16M7 17h10M12 4v10M6 7h12"/><path d="m6 7-3 5h6L6 7Zm12 0-3 5h6l-3-5Z"/></>,
@@ -691,6 +693,18 @@ function AwardsHub({ persona }: { persona: string }) {
   );
 }
 
+function monthlyBar(cap: number, prev: number, curr: number) {
+  const scale = Math.max(cap, prev + curr);
+  const pct = (value: number) => (value / scale) * 100;
+  return { prevPct: pct(prev), currPct: pct(curr), over: prev + curr > cap };
+}
+
+const kpiBars = {
+  rewards: monthlyBar(600, 155, 180),
+  nominations: monthlyBar(4, 0, 2),
+  score: monthlyBar(160, 67, 64),
+};
+
 export default function App() {
   const [active, setActive] = useState("Home");
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -767,9 +781,24 @@ export default function App() {
               </div>
 
               <div className="employee-kpis">
-                <article className="employee-kpi"><div className="kpi-title">Rewards <span className="info-dot">i</span></div><strong>2,450 <small>pts</small></strong><p className="delta teal">+180/month</p><div className="mini-progress"><i style={{ width: "80%" }}/></div></article>
-                <article className="employee-kpi"><div className="kpi-title">Nominations <span className="info-dot">i</span></div><strong>2 <small>pending</small></strong><p className="delta blue"><i/>+1 this week</p></article>
-                <article className="employee-kpi"><div className="kpi-title">Score <span className="info-dot">i</span></div><strong>64<small>%</small></strong><p className="delta red"><i/>−3%</p></article>
+                <article className="employee-kpi">
+                  <div className="kpi-title"><span>Rewards <span className="info-dot">i</span></span><Icon name="chevron" size={13}/></div>
+                  <div className="kpi-value"><strong>180 <small>pts</small></strong></div>
+                  <p className="kpi-delta"><strong className="up">↑ 16%</strong><span>Since last month</span></p>
+                  <div className={`monthly-bar ${kpiBars.rewards.over ? "over" : ""}`} aria-label="This month vs last month" title="Allowance: 600 pts/mo"><i className="curr" style={{ width: `${kpiBars.rewards.currPct}%` }}/><i className="prev" style={{ width: `${kpiBars.rewards.prevPct}%` }}/></div>
+                </article>
+                <article className="employee-kpi">
+                  <div className="kpi-title"><span>Nominations <span className="info-dot">i</span></span><Icon name="chevron" size={13}/></div>
+                  <div className="kpi-value"><strong>2 <small>pending</small></strong><span className="kpi-chip up"><i>↑</i>+2</span></div>
+                  <p className="kpi-delta"><strong className="up">+2</strong><span>Since last month</span></p>
+                  <div className={`monthly-bar ${kpiBars.nominations.over ? "over" : ""}`} aria-label="This month vs last month" title="Allowance: 4 nominations/mo"><i className="curr" style={{ width: `${kpiBars.nominations.currPct}%` }}/><i className="prev" style={{ width: `${kpiBars.nominations.prevPct}%` }}/></div>
+                </article>
+                <article className="employee-kpi">
+                  <div className="kpi-title"><span>Score <span className="info-dot">i</span></span><Icon name="chevron" size={13}/></div>
+                  <div className="kpi-value"><strong>64<small>%</small></strong><span className="kpi-chip down"><i>↓</i>−3</span></div>
+                  <p className="kpi-delta"><strong className="down">−3%</strong><span>Since last month</span></p>
+                  <div className={`monthly-bar ${kpiBars.score.over ? "over" : ""}`} aria-label="This month vs last month" title="Scale: 160"><i className="curr" style={{ width: `${kpiBars.score.currPct}%` }}/><i className="prev" style={{ width: `${kpiBars.score.prevPct}%` }}/></div>
+                </article>
               </div>
 
               <div className="balance-buddies">

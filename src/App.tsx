@@ -2,7 +2,6 @@ import { useState, type ReactNode } from "react";
 
 type IconName =
   | "home"
-  | "feed"
   | "spark"
   | "award"
   | "jury"
@@ -18,7 +17,6 @@ type IconName =
 
 const iconPaths: Record<IconName, ReactNode> = {
   home: <><path d="M3 10.8 12 3l9 7.8"/><path d="M5.5 9.5V21h13V9.5M9.5 21v-6h5v6"/></>,
-  feed: <><path d="M4 6h16M4 11h16M4 16h10"/></>,
   spark: <><path d="m12 2 1.5 5.2L19 9l-5.5 1.8L12 16l-1.5-5.2L5 9l5.5-1.8L12 2Z"/><path d="m19 15 .7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></>,
   award: <><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1 8 4.5-2 4.5 2-1-8"/></>,
   jury: <><path d="M4 20h16M7 17h10M12 4v10M6 7h12"/><path d="m6 7-3 5h6L6 7Zm12 0-3 5h6l-3-5Z"/></>,
@@ -67,7 +65,6 @@ const personas = [
 
 const navItems: { label: string; icon: IconName; badge?: number }[] = [
   { label: "Dashboard", icon: "home" },
-  { label: "Feed", icon: "feed" },
   { label: "My Recognition", icon: "spark" },
   { label: "My Rewards", icon: "wallet" },
   { label: "Approvals", icon: "jury", badge: 2 },
@@ -713,120 +710,14 @@ function AwardsHub({ persona }: { persona: string }) {
   );
 }
 
-const subjectColor: Record<string, string> = { Nikhilesh: "teal", Syed: "yellow", Shourya: "mauve", Prateesh: "green" };
-
 const feedEntries = [
   { id: 1, verb: "praised", actor: "Prateesh", subject: "Nikhilesh", title: null as string | null, category: "Delivery", pts: "+50 pts", text: "Payer claims went dark at 6 AM. Nikhilesh traced it to a schema drift in the eligibility feed before most of us had coffee, and the fix was live by standup. The account team learned the outage existed from a status email.", r: [31, 11, 8, 5], c: [{ by: "Prateesh", text: "This is the standard — sharing the postmortem path with the whole pod today." }, { by: "Shan", text: "Schema drift again. Glad it was caught before a payer found it." }] },
   { id: 2, verb: "awarded", actor: "Prastina", subject: "Shourya", title: "Build of the Quarter", category: "Innovation", pts: "+2,500 pts", award: true, text: "Shourya’s accessibility eval harness compresses four hours of release validation into a 40-minute run. Five jury votes, no discussion, no objection — it isn’t even close.", r: [22, 44, 15, 9], c: [{ by: "Prastina", text: "Well earned. The jury saw what we see every sprint." }, { by: "Nikhilesh", text: "Ran it against my own pipeline — the 40 minutes are real." }, { by: "Syed", text: "Stole my phrase, built my favorite tool. Legend." }] },
   { id: 3, verb: "praised", actor: "Shan", subject: "Syed", title: null, category: "Customer impact", pts: "+25 pts", text: "Syed’s drift report on readmission risk landed five days ahead of revalidation. The client recalibrated in time, on their own, and nobody had to say the word ‘incident’.", r: [7, 2, 12, 4], c: [] },
   { id: 4, verb: "praised", actor: "Prateesh", subject: "Shourya", title: null, category: "Collaboration", text: "Two sprints with the QA squad and Shourya handed back runbooks the whole pod runs on now. Velocity won’t show any of it; every release after this month will.", r: [18, 3, 10, 6], c: [{ by: "Syed", text: "The runbooks saved my release prep this week. Thank you." }] },
-  { id: 5, verb: "celebrates", actor: "Prastina", subject: "Prateesh", title: "8 years", category: "Moments", text: "Eight years ago the portfolio was two accounts; today the largest one runs on the delivery playbook built along the way. Eight years, Prateesh — we’d happily take ten more.", r: [14, 36, 17, 11], c: [{ by: "Prastina", text: "Eight more then. Annually considered." }] },
   { id: 6, verb: "praised", actor: "Nikhilesh", subject: "Syed", title: null, category: "Delivery", pts: "+25 pts", text: "The census import had one bug that showed up only on Tuesdays and had already survived three audits. Syed pinned the state race, killed it, and left the repro test that keeps it extinct.", r: [16, 2, 7, 3], c: [] },
-  { id: 7, verb: "welcomes", actor: "Prastina", subject: "Shourya", title: "Joined the pod", category: "Moments", text: "Some people join and wait for instructions. Shourya picked up two dashboards in the first week and asked the questions that made our huddle longer — and sharper. Say hello next time.", r: [9, 8, 11, 4], c: [] },
   { id: 8, verb: "praised", actor: "Shan", subject: "Nikhilesh", title: null, category: "Delivery", pts: "+25 pts", text: "A new joiner used to burn a full week on environment setup. Nikhilesh rebuilt it into one day — working stack, first commit by lunch. Three batches have already come down the new path.", r: [24, 3, 5, 4], c: [] },
 ];
-
-const REACT_EMOJIS = ["👍", "🚀", "💙", "⭐"];
-const AI_DRAFTS: Record<string, (name: string) => string> = {
-  Delivery: (name) => `${name} got the payer-claims pipeline back before standup — traced the schema drift in the eligibility feed while the account team was still asleep.`,
-  "Customer impact": (name) => `${name}’s drift report landed five days before revalidation. The client recalibrated on their own and nobody had to say the word ‘incident’.`,
-  Collaboration: (name) => `${name} spent two sprints with the QA squad and came back with runbooks the whole pod runs on now. The glue work finally has a record.`,
-  Innovation: (name) => `${name} compressed our release validation from four hours into a 40-minute run with the harness they built on their own track.`,
-  Moments: (name) => `Proud of ${name} today — steady hands on a rough day, and the whole pod felt the difference. Worth a moment.`,
-};
-
-function FeedPage({ person, posts, myReact, onReact, onComment, onPost, poolLabel, poolLeft }: { person: string; posts: typeof feedEntries; myReact: Record<number, number>; onReact: (id: number, index: number) => void; onComment: (id: number, text: string) => void; onPost: (subject: string, category: string, text: string, pts: number | null) => boolean; poolLabel: string; poolLeft: number | null }) {
-  const [tab, setTab] = useState("Everyone");
-  const [activeCats, setActiveCats] = useState<string[]>([]);
-  const [draft, setDraft] = useState("");
-  const [commentDraft, setCommentDraft] = useState("");
-  const [openId, setOpenId] = useState<number | null>(null);
-  const [subject, setSubject] = useState("Nikhilesh" === person ? "Syed" : "Nikhilesh");
-  const [category, setCategory] = useState("Delivery");
-  const [pts, setPts] = useState("None");
-  const [note, setNote] = useState("");
-  const categories = ["Delivery", "Customer impact", "Collaboration", "Innovation", "Moments"];
-  const team = ["Nikhilesh", "Syed", "Shourya", "Prateesh"];
-  const recipients = personas.filter((p) => p.name !== person).map((p) => p.name);
-  const me = personas.find((p) => p.name === person)!;
-  const managerTier = me.role.startsWith("Manager") || me.role.startsWith("Admin");
-  const ptsOptions = managerTier ? [100, 500, 1000] : [25, 50, 100];
-  const ptsNum = pts === "None" ? null : parseInt(pts, 10);
-  const overPool = ptsNum !== null && poolLeft !== null && ptsNum > poolLeft;
-  const entries = posts.filter((entry) => {
-    const inTab = tab === "Everyone" ? true : tab === "My pod" ? team.includes(entry.subject) : entry.subject === person;
-    const inCats = activeCats.length === 0 ? true : entry.category !== null && activeCats.includes(entry.category);
-    return inTab && inCats;
-  });
-  const toggleCat = (name: string) => setActiveCats((current) => current.includes(name) ? current.filter((item) => item !== name) : [...current, name]);
-  const showNote = (message: string) => {
-    setNote(message);
-    window.setTimeout(() => setNote(""), 3200);
-  };
-  const send = () => {
-    if (draft.trim().length < 4) { showNote("Say the specific thing they did — that is the ask."); return; }
-    if (ptsNum !== null && poolLeft !== null && ptsNum > poolLeft) { showNote(`${poolLabel} only has ${poolLeft.toLocaleString()} left — reduce the points or request more budget.`); return; }
-    if (onPost(subject, category, draft.trim(), ptsNum)) {
-      setDraft("");
-      showNote(ptsNum ? `Kudos posted — ${ptsNum} pts routed${managerTier ? " from your pool" : ""}` : "Kudos is free — posted to the feed");
-    }
-  };
-  const postComment = (id: number) => {
-    if (!commentDraft.trim()) return;
-    onComment(id, commentDraft.trim());
-    setCommentDraft("");
-  };
-  return (
-    <section className="feed-page">
-      <div className="feed-hero">
-        <h1>Feed</h1>
-        <p>A running log of the work that made the week better.</p>
-      </div>
-      <div className="feed-composer">
-        <input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Name the moment — what happened, why it mattered…" aria-label="Write recognition"/>
-        <div className="composer-row">
-          <select value={subject} onChange={(event) => setSubject(event.target.value)} aria-label="Recognize teammate">{recipients.map((name) => <option key={name}>{name}</option>)}</select>
-          <select value={category} onChange={(event) => setCategory(event.target.value)} aria-label="Category">{categories.map((name) => <option key={name}>{name}</option>)}</select>
-          <select value={pts} onChange={(event) => setPts(event.target.value)} aria-label="Attach points"><option>None</option>{ptsOptions.map((value) => <option key={value}>{value}</option>)}</select>
-          <button className="ai-draft" onClick={() => setDraft(AI_DRAFTS[category](subject))}><Icon name="spark" size={14}/> AI draft</button>
-          <button className="send-button" onClick={send}>Post kudos</button>
-        </div>
-        <p className="composer-note">{pts === "None" ? "Kudos is always free — points are optional" : `${pts} pts ${managerTier ? `from ${poolLabel}` : "from the program pool"} (${poolLeft === null ? "pool untracked here" : `${poolLeft.toLocaleString()} left this month`})`}{overPool ? " — exceeds your pool" : ""}</p>
-      </div>
-      <div className="feed-tabs">{["Everyone", "My pod", "About me"].map((name) => <button className={tab === name ? "active" : ""} key={name} onClick={() => setTab(name)}>{name}</button>)}</div>
-      <div className="feed-cats">{categories.map((name) => <button className={activeCats.includes(name) ? "active" : ""} key={name} onClick={() => toggleCat(name)}>{name}</button>)}</div>
-      <div className="feed-list">
-        {entries.map((entry) => (
-          <article className={`feed-item ${entry.award ? "award" : ""}`} key={entry.id}>
-            <div className="fi-head">
-              <Avatar initials={entry.subject.slice(0, 2).toUpperCase()} color={colorOf[entry.subject] ?? subjectColor[entry.subject] ?? "black"} large/>
-              <div className="fi-id">
-                <strong>{entry.subject}</strong>
-                <small>{entry.actor} {entry.verb}{entry.title ? ` · ${entry.title}` : ""}</small>
-              </div>
-              <div className="fi-tags">
-                {entry.category && <span className="fi-category">{entry.category}</span>}
-                {entry.pts && <span className="fi-pts">{entry.pts}</span>}
-              </div>
-            </div>
-            <p className="fi-text">{entry.text}</p>
-            <div className="fi-reactions">{REACT_EMOJIS.map((emoji, index) => <button key={emoji} className={myReact[entry.id] === index ? "mine" : ""} onClick={() => onReact(entry.id, index)} aria-label={`React with ${emoji}`}>{emoji}<i>{entry.r[index] || ""}</i></button>)}</div>
-            <div className="fi-foot"><span>{entry.c.length ? `${entry.c.length} comment${entry.c.length === 1 ? "" : "s"}` : ""}</span><button onClick={() => { setOpenId(openId === entry.id ? null : entry.id); setCommentDraft(""); }}>{openId === entry.id ? "Close" : "Reply"}</button></div>
-            {openId === entry.id && <div className="fi-comments">
-              {entry.c.map((comment, index) => <p key={index}><strong>{comment.by}</strong>{comment.text}</p>)}
-              <div className="fi-comment-row">
-                <input value={commentDraft} onChange={(event) => setCommentDraft(event.target.value)} placeholder={`Reply as ${person}…`} aria-label="Write a reply"/>
-                <button onClick={() => postComment(entry.id)}>Post</button>
-              </div>
-            </div>}
-          </article>
-        ))}
-        {entries.length === 0 && <p className="feed-none">Nothing matches these filters yet.</p>}
-      </div>
-      {note && <div className="toast"><span>i</span>{note}</div>}
-    </section>
-  );
-}
 
 function SectionHead({ eyebrow, title, sub, action }: { eyebrow: string; title: string; sub?: string; action?: ReactNode }) {
   return (
@@ -906,30 +797,6 @@ export default function App() {
   const [currentPersona, setCurrentPersona] = useState(personas[0]);
   const [likedPosts, setLikedPosts] = useState<number[]>([]);
   const [posts, setPosts] = useState(feedEntries);
-  const [myReact, setMyReact] = useState<Record<number, number>>({});
-
-  const toggleReact = (id: number, index: number) => {
-    const prev = myReact[id] ?? -1;
-    const next = prev === index ? -1 : index;
-    setMyReact({ ...myReact, [id]: next });
-    setPosts((current) => current.map((p) => p.id === id ? { ...p, r: p.r.map((count, i) => i === next ? count + 1 : i === prev ? Math.max(0, count - 1) : count) } : p));
-  };
-
-  const addComment = (id: number, text: string) => {
-    setPosts((current) => current.map((p) => p.id === id ? { ...p, c: [...p.c, { by: currentPersona.name, text }] } : p));
-  };
-
-  const postKudos = (subject: string, category: string, text: string, pts: number | null) => {
-    if (pts !== null) {
-      const pool = carrierPools[currentPersona.name];
-      if (pool && pts > pool[0]) return false;
-    }
-    setPosts((current) => [
-      { id: Date.now(), verb: "praised", actor: currentPersona.name, subject, title: null, category, pts: pts ? `+${pts.toLocaleString()} pts` : null, text, r: [0, 0, 0, 0], c: [] },
-      ...current,
-    ]);
-    return true;
-  };
   const [wizardOpen, setWizardOpen] = useState(false);
   const [toast, setToast] = useState("");
   const [palette, setPalette] = useState<"emids" | "amber">(() => (localStorage.getItem("applause-palette") === "amber" ? "amber" : "emids"));
@@ -997,7 +864,7 @@ export default function App() {
 
         <div className="workspace">
           <div className="content">
-            {active === "Feed" ? <FeedPage person={currentPersona.name} posts={posts} myReact={myReact} onReact={toggleReact} onComment={addComment} onPost={postKudos} poolLeft={carrierPools[currentPersona.name]?.[0] ?? null} poolLabel={currentPersona.name === "Prateesh" ? "Your L1 pool" : currentPersona.name === "Shan" ? "Your L2 pool" : currentPersona.name === "Prastina" ? "Your L3 pool" : "The awards-office pool"}/> : active === "My Recognition" ? <MyRecognition personaName={currentPersona.name} openWizard={openRecognition} posts={posts}/> : active === "My Rewards" ? <MyRewards/> : active === "Approvals" ? <ApprovalsHub personaName={currentPersona.name} onGoWallet={() => setActive("My Rewards")}/> : <section className="employee-dashboard">
+            {active === "My Recognition" ? <MyRecognition personaName={currentPersona.name} openWizard={openRecognition} posts={posts}/> : active === "My Rewards" ? <MyRewards/> : active === "Approvals" ? <ApprovalsHub personaName={currentPersona.name} onGoWallet={() => setActive("My Rewards")}/> : <section className="employee-dashboard">
               <div className="employee-heading">
                 <div><p className="eyebrow dark">YOUR HOME</p><h1>Rise and shine, {currentPersona.name}! <span>👋</span></h1></div>
                 <button className="give-button" onClick={openRecognition}>＋ Give recognition</button>
